@@ -1,0 +1,729 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% trans "Mega Events" %}{% endblock %}</title>
+
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mai.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.mCustomScrollbar.min.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+
+    <style>
+        html[dir="rtl"] body {
+            direction: rtl;
+            text-align: right;
+            font-family: Tahoma, Arial, sans-serif;
+        }
+
+        html[dir="rtl"] .header-center,
+        html[dir="rtl"] .login_text ul,
+        html[dir="rtl"] .hero-actions,
+        html[dir="rtl"] .home-section-head,
+        html[dir="rtl"] .luxury-section-head,
+        html[dir="rtl"] .cart-summary-row,
+        html[dir="rtl"] .cart-drawer-summary-row,
+        html[dir="rtl"] .cart-item-actions,
+        html[dir="rtl"] .cart-drawer-item-actions {
+            direction: rtl;
+        }
+
+        html[dir="rtl"] .ml-1 {
+            margin-left: 0 !important;
+            margin-right: .25rem !important;
+        }
+
+        html[dir="rtl"] .ml-2 {
+            margin-left: 0 !important;
+            margin-right: .5rem !important;
+        }
+
+        html[dir="rtl"] .ml-3 {
+            margin-left: 0 !important;
+            margin-right: 1rem !important;
+        }
+
+        html[dir="rtl"] .mr-1 {
+            margin-right: 0 !important;
+            margin-left: .25rem !important;
+        }
+
+        html[dir="rtl"] .mr-2 {
+            margin-right: 0 !important;
+            margin-left: .5rem !important;
+        }
+
+        html[dir="rtl"] .mr-3 {
+            margin-right: 0 !important;
+            margin-left: 1rem !important;
+        }
+
+        html[dir="rtl"] .dropdown-menu-right {
+            right: auto;
+            left: 0;
+        }
+
+        html[dir="rtl"] .modern-search-icon {
+            left: auto;
+            right: 22px;
+        }
+
+        html[dir="rtl"] .modern-search-input {
+            padding-left: 20px;
+            padding-right: 54px;
+        }
+
+        .language-switcher select {
+            min-width: 95px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .header-link.active,
+        .header-link:hover {
+            text-decoration: none;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+
+<div class="top_header">
+    <div class="container">
+        <div class="text-carousel-top">
+            <div class="carousel-top active">
+                {% trans "Flowers • Event Rentals • Party Services" %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header_section">
+    <div class="container-fluid mega-header-container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light luxury-navbar mega-navbar">
+
+            <!-- Left: Menu -->
+            <div class="mega-nav-left">
+                <span class="toggle_icon" onclick="openNav()">
+                    <i class="fa fa-bars"></i>
+                </span>
+            </div>
+
+            <!-- Center: Logo -->
+            <a class="navbar-brand luxury-logo mega-logo-wrap" href="{% url 'index' %}">
+                <span class="brand-mark">Mega Events</span>
+            </a>
+
+            <!-- Desktop Center Links -->
+            <div class="header-center d-none d-lg-flex mega-desktop-links">
+                <a href="{% url 'index' %}" class="header-link">{% trans "Home" %}</a>
+                <a href="{% url 'flowers_page' %}">{% trans "Flowers" %}</a>
+                <a href="{% url 'rentals_page' %}">{% trans "Rentals" %}</a>
+                <a href="{% url 'services_page' %}">{% trans "Services" %}</a>
+                <a href="{% url 'cart' %}" class="header-link">{% trans "Cart" %}</a>
+            </div>
+
+            <!-- Right: Language + Icons -->
+            <div class="login_text mega-nav-right">
+                <ul class="d-flex align-items-center mb-0">
+
+                    <li class="language-li">
+                    <div class="language-switcher">
+                        <select class="form-control form-control-sm"
+                                onchange="window.location.href=this.value;">
+                            <option value="{% url 'switch_language' 'en' %}?next={{ request.get_full_path|urlencode }}"
+                                    {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>
+                                EN
+                            </option>
+
+                            <option value="{% url 'switch_language' 'ar' %}?next={{ request.get_full_path|urlencode }}"
+                                    {% if LANGUAGE_CODE == 'ar' %}selected{% endif %}>
+                                AR
+                            </option>
+                        </select>
+                    </div>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'search' %}" title="{% trans 'Search' %}">
+                            <i class="fa fa-search"></i>
+                        </a>
+                    </li>
+
+                    <li class="wishlist-header-icon">
+                        <a href="{% url 'wishlist' %}" title="{% trans 'Wishlist' %}">
+                            <i class="fa-regular fa-heart"></i>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'cart' %}" class="cart-icon" id="headerCartButton" title="{% trans 'Cart' %}">
+                            <i class="fa fa-shopping-cart"></i>
+                            <span class="badge" id="cart-count-badge">
+                                {{ request.session.cart_items_count|default:0 }}
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </nav>
+    </div>
+</div>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+        <a href="{% url 'index' %}">{% trans "Home" %}</a>
+        <a href="{% url 'flowers_page' %}" class="header-link">{% trans "Flowers" %}</a>
+        <a href="{% url 'rentals_page' %}" class="header-link">{% trans "Rentals" %}</a>
+        <a href="{% url 'services_page' %}" class="header-link">{% trans "Services" %}</a>
+        <a href="{% url 'wishlist' %}">{% trans "Wishlist" %}</a>
+
+        {% if categories %}
+        <a href="javascript:void(0)" class="dropdown-toggle" onclick="toggleDropdown('categoryDropdown')">
+            {% trans "Categories" %} <i class="fa fa-caret-down"></i>
+        </a>
+
+        <div id="categoryDropdown" class="dropdown-container">
+            {% for category in categories %}
+            <a href="{% url 'category_products' category.id %}">
+                {% if LANGUAGE_CODE == "ar" and category.name_ar %}
+                    {{ category.name_ar }}
+                {% else %}
+                    {{ category.name }}
+                {% endif %}
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <div class="mobile-bottom-nav d-md-none">
+        <a href="{% url 'index' %}">
+            <span class="nav-icon"><i class="fa fa-home"></i></span>
+            <span class="nav-text">{% trans "Home" %}</span>
+        </a>
+
+        <a href="{% url 'flowers_page' %}">
+            <span class="nav-icon"><i class="fa-solid fa-seedling"></i></span>
+            <span class="nav-text">{% trans "Flowers" %}</span>
+        </a>
+
+        <a href="{% url 'rentals_page' %}">
+            <span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span>
+            <span class="nav-text">{% trans "Rentals" %}</span>
+        </a>
+        <a href="{% url 'cart' %}" id="mobileCartButton">
+            <span class="nav-icon"><i class="fa fa-shopping-cart"></i></span>
+            <span class="nav-text">{% trans "Cart" %}</span>
+            <span class="badge" id="mobile-cart-count-badge">
+                {{ request.session.cart_items_count|default:0 }}
+            </span>
+        </a>
+    </div>
+
+    <!-- CART DRAWER -->
+    <div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+
+    <aside class="cart-drawer" id="cartDrawer">
+        <div class="cart-drawer-content" id="cartDrawerContent">
+            <div class="cart-drawer-loading">
+                <i class="fa fa-spinner fa-spin"></i>
+                {% trans "Loading cart..." %}
+            </div>
+        </div>
+    </aside>
+
+<!-- BOOKING / RENT DRAWER -->
+<div class="booking-drawer-overlay" id="bookingDrawerOverlay"></div>
+
+<aside class="booking-drawer" id="bookingDrawer">
+    <div class="booking-drawer-header">
+        <div>
+            <h4 id="bookingDrawerTitle">{% trans "Book Service" %}</h4>
+            <small id="bookingDrawerSubtitle">
+                {% trans "Select event date and venue. Contact details are added at checkout." %}
+            </small>
+        </div>
+
+        <button type="button" class="booking-drawer-close" id="bookingDrawerCloseBtn">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <div class="booking-drawer-body">
+        <div class="booking-product-preview">
+            <img src="" alt="" id="bookingProductImage">
+            <div>
+                <h5 id="bookingProductName"></h5>
+                <p id="bookingProductPrice"></p>
+            </div>
+        </div>
+
+        <form method="post" id="bookingDrawerForm" class="ajax-add-to-cart-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="booking_event_date">
+                    {% trans "Event Date" %} <span class="text-danger">*</span>
+                </label>
+                <input type="date" name="event_date" id="booking_event_date" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="booking_venue">
+                    {% trans "Venue / Location" %} <span class="text-danger">*</span>
+                </label>
+                <input type="text" name="venue" id="booking_venue" class="form-control"
+                       placeholder="{% trans 'Home, hall, hotel, school, garden...' %}" required>
+            </div>
+
+            <button type="submit" class="booking-submit-btn">
+                <i class="fa-solid fa-calendar-check mr-2"></i>
+                <span id="bookingSubmitText">{% trans "Add Request" %}</span>
+            </button>
+        </form>
+    </div>
+</aside>
+
+{% if messages %}
+<div class="order-success-modal-overlay" id="orderSuccessModalOverlay">
+    <div class="order-success-modal">
+        <div class="order-success-icon">
+            <i class="fa-solid fa-check"></i>
+        </div>
+
+        <h3>{% trans "Order Received Successfully" %}</h3>
+
+        {% for message in messages %}
+            {% if message.tags == "success" %}
+                <p>{{ message }}</p>
+            {% endif %}
+        {% endfor %}
+
+        <div class="order-success-actions">
+            <a href="{% url 'index' %}" class="order-success-btn primary">
+                {% trans "Continue Shopping" %}
+            </a>
+
+            <button type="button" class="order-success-btn light" id="closeOrderSuccessModal">
+                {% trans "Close" %}
+            </button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/plugin.js' %}"></script>
+    <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+
+    <script>
+        function openNav() {
+            const sidenav = document.getElementById("mySidenav");
+            if (sidenav) sidenav.style.width = "290px";
+        }
+
+        function closeNav() {
+            const sidenav = document.getElementById("mySidenav");
+            if (sidenav) sidenav.style.width = "0";
+        }
+
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.style.display = el.style.display === "block" ? "none" : "block";
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const cartDrawer = document.getElementById("cartDrawer");
+            const cartDrawerOverlay = document.getElementById("cartDrawerOverlay");
+            const cartDrawerContent = document.getElementById("cartDrawerContent");
+            const headerCartButton = document.getElementById("headerCartButton");
+            const mobileCartButton = document.getElementById("mobileCartButton");
+            const cartCountBadge = document.getElementById("cart-count-badge");
+            const mobileCartCountBadge = document.getElementById("mobile-cart-count-badge");
+
+            const bookingDrawer = document.getElementById("bookingDrawer");
+            const bookingDrawerOverlay = document.getElementById("bookingDrawerOverlay");
+            const bookingDrawerCloseBtn = document.getElementById("bookingDrawerCloseBtn");
+            const bookingDrawerForm = document.getElementById("bookingDrawerForm");
+
+            const bookingDrawerTitle = document.getElementById("bookingDrawerTitle");
+            const bookingDrawerSubtitle = document.getElementById("bookingDrawerSubtitle");
+            const bookingProductImage = document.getElementById("bookingProductImage");
+            const bookingProductName = document.getElementById("bookingProductName");
+            const bookingProductPrice = document.getElementById("bookingProductPrice");
+            const bookingSubmitText = document.getElementById("bookingSubmitText");
+
+            function setCartCount(count) {
+                if (cartCountBadge) cartCountBadge.textContent = count;
+                if (mobileCartCountBadge) mobileCartCountBadge.textContent = count;
+            }
+
+            function getCSRFToken(form) {
+                const tokenInput = form.querySelector('input[name="csrfmiddlewaretoken"]');
+                return tokenInput ? tokenInput.value : "";
+            }
+
+            function openCartDrawer() {
+                if (!cartDrawer || !cartDrawerOverlay) return;
+                cartDrawer.classList.add("open");
+                cartDrawerOverlay.classList.add("open");
+                document.body.classList.add("cart-drawer-open");
+            }
+
+            function closeCartDrawer() {
+                if (!cartDrawer || !cartDrawerOverlay) return;
+                cartDrawer.classList.remove("open");
+                cartDrawerOverlay.classList.remove("open");
+                document.body.classList.remove("cart-drawer-open");
+            }
+
+            function openBookingDrawer(button) {
+                if (!bookingDrawer || !bookingDrawerOverlay || !bookingDrawerForm) return;
+
+                const productName = button.dataset.productName || "";
+                const productImage = button.dataset.productImage || "";
+                const productPrice = button.dataset.productPrice || "";
+                const productType = button.dataset.productType || "RENTAL";
+                const actionUrl = button.dataset.actionUrl || "";
+
+                bookingDrawerForm.setAttribute("action", actionUrl);
+
+                if (bookingDrawerTitle) {
+                    bookingDrawerTitle.textContent = productType === "SERVICE" ? "{% trans 'Book Service' %}" : "{% trans 'Rent Item' %}";
+                }
+
+                if (bookingDrawerSubtitle) {
+                    bookingDrawerSubtitle.textContent = "{% trans 'Select event date and venue. Contact details are added at checkout.' %}";
+                }
+
+                if (bookingProductImage) {
+                    bookingProductImage.src = productImage;
+                    bookingProductImage.alt = productName;
+                }
+
+                if (bookingProductName) {
+                    bookingProductName.textContent = productName;
+                }
+
+                if (bookingProductPrice) {
+                    bookingProductPrice.textContent = productPrice;
+                }
+
+                if (bookingSubmitText) {
+                    bookingSubmitText.textContent = productType === "SERVICE" ? "{% trans 'Book Service' %}" : "{% trans 'Add Rental Request' %}";
+                }
+
+                const today = new Date().toISOString().split("T")[0];
+                const dateInput = document.getElementById("booking_event_date");
+
+                if (dateInput) {
+                    dateInput.setAttribute("min", today);
+                }
+
+                bookingDrawer.classList.add("open");
+                bookingDrawerOverlay.classList.add("open");
+                document.body.classList.add("booking-drawer-open");
+            }
+
+            function closeBookingDrawer() {
+                if (!bookingDrawer || !bookingDrawerOverlay) return;
+
+                bookingDrawer.classList.remove("open");
+                bookingDrawerOverlay.classList.remove("open");
+                document.body.classList.remove("booking-drawer-open");
+
+                if (bookingDrawerForm) {
+                    bookingDrawerForm.reset();
+                }
+            }
+
+            function attachDrawerEvents() {
+                const closeBtn = document.getElementById("cartDrawerCloseBtn");
+
+                if (closeBtn) {
+                    closeBtn.addEventListener("click", closeCartDrawer);
+                }
+
+                if (!cartDrawerContent) return;
+
+                const ajaxActionForms = cartDrawerContent.querySelectorAll(".ajax-cart-action-form");
+
+                ajaxActionForms.forEach(form => {
+                    form.addEventListener("submit", async function (e) {
+                        e.preventDefault();
+
+                        try {
+                            const response = await fetch(form.getAttribute("action"), {
+                                method: "POST",
+                                headers: {
+                                    "X-Requested-With": "XMLHttpRequest",
+                                    "X-CSRFToken": getCSRFToken(form),
+                                },
+                                body: new FormData(form)
+                            });
+
+                            const contentType = response.headers.get("content-type") || "";
+
+                            if (!contentType.includes("application/json")) {
+                                const text = await response.text();
+                                console.error("Expected JSON but got:", text);
+                                throw new Error("Server returned HTML instead of JSON.");
+                            }
+
+                            const data = await response.json();
+
+                            if (!response.ok || data.status !== "success") {
+                                throw new Error(data.message || "Cart action failed.");
+                            }
+
+                            if (data.drawer_html) {
+                                cartDrawerContent.innerHTML = data.drawer_html;
+                            } else if (data.html) {
+                                cartDrawerContent.innerHTML = data.html;
+                            }
+
+                            if (typeof data.count !== "undefined") {
+                                setCartCount(data.count);
+                            }
+
+                            attachDrawerEvents();
+                            openCartDrawer();
+
+                        } catch (err) {
+                            console.error("Cart action failed:", err);
+                            alert(err.message || "Failed to update cart.");
+                        }
+                    });
+                });
+            }
+
+            function refreshCartDrawer(openAfter = false) {
+                if (!cartDrawerContent) return;
+
+                fetch("{% url 'cart_drawer' %}", {
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                })
+                .then(async res => {
+                    const contentType = res.headers.get("content-type") || "";
+
+                    if (!contentType.includes("application/json")) {
+                        const text = await res.text();
+                        console.error("Expected JSON but got:", text);
+                        throw new Error("Server returned HTML instead of JSON.");
+                    }
+
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.status !== "success") {
+                        throw new Error(data.message || "Failed to load cart.");
+                    }
+
+                    cartDrawerContent.innerHTML = data.html;
+                    setCartCount(data.count);
+                    attachDrawerEvents();
+
+                    if (openAfter) {
+                        openCartDrawer();
+                    }
+                })
+                .catch(err => console.error("Failed to load cart drawer:", err));
+            }
+
+            document.addEventListener("click", function (e) {
+                const button = e.target.closest(".open-booking-drawer-btn");
+
+                if (!button) return;
+
+                e.preventDefault();
+                openBookingDrawer(button);
+            });
+
+            document.addEventListener("submit", function (e) {
+                const form = e.target.closest(".ajax-add-to-cart-form");
+
+                if (!form) return;
+
+                e.preventDefault();
+
+                const submitBtn = form.querySelector("button[type='submit']");
+
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add("loading");
+                }
+
+                fetch(form.getAttribute("action"), {
+                    method: "POST",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": getCSRFToken(form),
+                    },
+                    body: new FormData(form)
+                })
+                .then(async res => {
+                    const contentType = res.headers.get("content-type") || "";
+
+                    if (!contentType.includes("application/json")) {
+                        const text = await res.text();
+                        console.error("Expected JSON but got:", text);
+                        throw new Error("Server returned HTML instead of JSON.");
+                    }
+
+                    const data = await res.json();
+
+                    if (!res.ok || data.status !== "success") {
+                        throw new Error(data.message || "Failed to add item.");
+                    }
+
+                    return data;
+                })
+                .then(data => {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove("loading");
+                    }
+
+                    if (bookingDrawer && bookingDrawer.classList.contains("open")) {
+                        closeBookingDrawer();
+                    }
+
+                    cartDrawerContent.innerHTML = data.html || data.drawer_html;
+                    setCartCount(data.count);
+                    attachDrawerEvents();
+                    openCartDrawer();
+                })
+                .catch(err => {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove("loading");
+                    }
+
+                    console.error("Add to cart failed:", err);
+                    alert(err.message || "Failed to add item.");
+                });
+            });
+
+            if (headerCartButton) {
+                headerCartButton.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    refreshCartDrawer(true);
+                });
+            }
+
+            if (mobileCartButton) {
+                mobileCartButton.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    refreshCartDrawer(true);
+                });
+            }
+
+            if (cartDrawerOverlay) {
+                cartDrawerOverlay.addEventListener("click", closeCartDrawer);
+            }
+
+            if (bookingDrawerCloseBtn) {
+                bookingDrawerCloseBtn.addEventListener("click", closeBookingDrawer);
+            }
+
+            if (bookingDrawerOverlay) {
+                bookingDrawerOverlay.addEventListener("click", closeBookingDrawer);
+            }
+
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape") {
+                    closeCartDrawer();
+                    closeBookingDrawer();
+                }
+            });
+        });
+    </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const successOverlay = document.getElementById("orderSuccessModalOverlay");
+    const closeSuccessBtn = document.getElementById("closeOrderSuccessModal");
+
+    function closeOrderSuccessModal() {
+        if (successOverlay) {
+            successOverlay.style.display = "none";
+        }
+    }
+
+    if (closeSuccessBtn) {
+        closeSuccessBtn.addEventListener("click", closeOrderSuccessModal);
+    }
+
+    if (successOverlay) {
+        successOverlay.addEventListener("click", function (e) {
+            if (e.target === successOverlay) {
+                closeOrderSuccessModal();
+            }
+        });
+    }
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+            closeOrderSuccessModal();
+        }
+    });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function markProductImageLoaded(img) {
+        const card = img.closest(".dlx-product-card");
+        if (card) {
+            card.classList.add("image-loaded");
+        }
+    }
+
+    document.querySelectorAll(".product-card-img").forEach(function (img) {
+        if (img.complete && img.naturalHeight !== 0) {
+            markProductImageLoaded(img);
+        } else {
+            img.addEventListener("load", function () {
+                markProductImageLoaded(img);
+            });
+
+            img.addEventListener("error", function () {
+                markProductImageLoaded(img);
+            });
+        }
+    });
+});
+</script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

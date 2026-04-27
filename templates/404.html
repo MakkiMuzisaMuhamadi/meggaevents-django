@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Page Not Found" %}{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="mega-empty-state">
+        <div class="mega-empty-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+
+        <h1 class="mb-2" style="font-size: 64px; font-weight: 900;">404</h1>
+
+        <h4>{% trans "Page Not Found" %}</h4>
+
+        <p>
+            {% trans "We are sorry, the page you are looking for does not exist. You can return home or search for products." %}
+        </p>
+
+        <div class="d-flex justify-content-center flex-wrap" style="gap: 12px;">
+            <a href="{% url 'index' %}" class="mega-empty-btn">
+                {% trans "Go Back Home" %}
+            </a>
+
+            <a href="{% url 'search' %}" class="mega-empty-btn" style="background:#c6a46a;color:#111!important;">
+                {% trans "Search" %}
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

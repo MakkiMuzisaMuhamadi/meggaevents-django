@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load i18n %}
+
+{% block title %}{% trans "Wishlist" %} | {% trans "Mega Events" %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+    <nav class="breadcrumb bg-light mb-4">
+        <a class="breadcrumb-item text-dark" href="{% url 'index' %}">
+            {% trans "Home" %}
+        </a>
+        <span class="breadcrumb-item active">
+            {% trans "Wishlist" %}
+        </span>
+    </nav>
+
+    <div class="home-section-head compact-head mb-4">
+        <div class="home-section-head__content">
+            <h2 class="home-section-head__title">{% trans "Wishlist" %}</h2>
+        </div>
+    </div>
+
+    {% if wishlist_items %}
+    <div class="product_section_2">
+        <div class="row product-grid-row">
+            {% for item in wishlist_items %}
+            <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                {% include "partials/product_card.html" with product=item.product %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="mega-empty-state">
+        <div class="mega-empty-icon">
+            <i class="fa-regular fa-heart"></i>
+        </div>
+
+        <h4>{% trans "Your wishlist is empty" %}</h4>
+
+        <p>
+            {% trans "Save flowers, rentals, and services you like so you can find them later." %}
+        </p>
+
+        <a href="{% url 'index' %}" class="mega-empty-btn">
+            {% trans "Explore Products" %}
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

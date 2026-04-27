@@ -1,0 +1,144 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+
+<div class="direct-form-shell">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <div>
+      <h4 class="mb-1 font-weight-bold">{{ page_title }}</h4>
+      <p class="text-muted-soft mb-0">
+        Manage homepage banners in English and Arabic.
+      </p>
+    </div>
+
+    <a href="{% url 'admin_slides' %}" class="btn btn-light border mt-2 mt-md-0">
+      <i class="fas fa-arrow-left mr-2"></i>Back to Slides
+    </a>
+  </div>
+
+  <div class="direct-form-card card">
+    <div class="card-header">
+      <h5 class="mb-1">Slide Information</h5>
+      <small class="text-muted-soft">Add or update slide title, description, and image.</small>
+    </div>
+
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+          <div class="form-errors-box">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        <div class="field-card">
+          <label class="form-label" for="id_title">
+            Slide Title <span class="required-star">*</span>
+          </label>
+          <input
+            type="text"
+            name="title"
+            id="id_title"
+            class="lux-input"
+            placeholder="Example: Fresh Flowers for Every Occasion"
+            value="{{ form.title.value|default_if_none:'' }}"
+          >
+          {% if form.title.errors %}
+            <div class="field-errors">{{ form.title.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="field-card">
+          <label class="form-label" for="id_title_ar">
+            Arabic Slide Title
+          </label>
+          <input
+            type="text"
+            name="title_ar"
+            id="id_title_ar"
+            class="lux-input"
+            dir="rtl"
+            placeholder="عنوان الشريحة بالعربية"
+            value="{{ form.title_ar.value|default_if_none:'' }}"
+          >
+          {% if form.title_ar.errors %}
+            <div class="field-errors">{{ form.title_ar.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="field-card">
+          <label class="form-label" for="id_description">
+            Description <span class="required-star">*</span>
+          </label>
+          <textarea
+            name="description"
+            id="id_description"
+            class="lux-textarea"
+            placeholder="Enter slide description"
+          >{{ form.description.value|default_if_none:'' }}</textarea>
+          {% if form.description.errors %}
+            <div class="field-errors">{{ form.description.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="field-card">
+          <label class="form-label" for="id_description_ar">
+            Arabic Description
+          </label>
+          <textarea
+            name="description_ar"
+            id="id_description_ar"
+            class="lux-textarea"
+            dir="rtl"
+            placeholder="وصف الشريحة بالعربية"
+          >{{ form.description_ar.value|default_if_none:'' }}</textarea>
+          {% if form.description_ar.errors %}
+            <div class="field-errors">{{ form.description_ar.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="field-card">
+          <label class="form-label" for="id_image">
+            Slide Image <span class="required-star">*</span>
+          </label>
+          <input
+            type="file"
+            name="image"
+            id="id_image"
+            class="lux-file"
+            accept="image/*"
+          >
+          {% if form.image.errors %}
+            <div class="field-errors">{{ form.image.errors }}</div>
+          {% endif %}
+        </div>
+
+        {% if form.instance.pk and form.instance.image %}
+          <div class="field-card">
+            <label class="form-label">Current Image</label>
+            <div class="image-preview-wrap">
+              <img src="{{ form.instance.image.url }}" alt="{{ form.instance.title }}">
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="mt-3">
+          <button type="submit" class="btn btn-primary px-4">
+            <i class="fas fa-save mr-2"></i>{{ submit_text }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

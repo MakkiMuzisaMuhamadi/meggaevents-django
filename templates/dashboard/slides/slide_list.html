@@ -1,0 +1,64 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Slides{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h4 class="mb-1 font-weight-bold">Slides</h4>
+    <p class="text-muted mb-0">Manage homepage banners and promotional slides.</p>
+  </div>
+
+  <a href="{% url 'admin_add_slide' %}" class="btn btn-primary">
+    <i class="fas fa-plus-circle mr-2"></i>Add Slide
+  </a>
+</div>
+
+<div class="row">
+  {% for slide in slides %}
+  <div class="col-lg-4 col-md-6 mb-4">
+    <div class="card shadow-sm border-0 rounded-4 h-100">
+
+      {% if slide.image %}
+      <img src="{{ slide.image.url }}" class="card-img-top" style="height:220px;object-fit:cover;">
+      {% endif %}
+
+      <div class="card-body">
+        <h5 class="font-weight-bold">{{ slide.title }}</h5>
+
+        {% if slide.title_ar %}
+          <h6 class="text-muted" dir="rtl">{{ slide.title_ar }}</h6>
+        {% endif %}
+
+        <p class="text-muted">{{ slide.description|truncatechars:120 }}</p>
+
+        {% if slide.description_ar %}
+          <p class="text-muted" dir="rtl">{{ slide.description_ar|truncatechars:120 }}</p>
+        {% endif %}
+      </div>
+
+      <div class="card-footer bg-white border-0">
+        <a href="{% url 'admin_edit_slide' slide.id %}" class="btn btn-outline-primary btn-sm">
+          <i class="fas fa-edit mr-1"></i>Edit
+        </a>
+
+        <form method="post" action="{% url 'admin_delete_slide' slide.id %}" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-danger btn-sm"
+                  onclick="return confirm('Delete this slide?');">
+            <i class="fas fa-trash mr-1"></i>Delete
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <div class="alert alert-light border">
+      No slides added yet.
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

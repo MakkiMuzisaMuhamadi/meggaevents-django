@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load i18n %}
+
+{% block title %}
+    {% if LANGUAGE_CODE == "ar" and category.name_ar %}
+        {{ category.name_ar }} | {% trans "Mega Events" %}
+    {% else %}
+        {{ category.name }} | {% trans "Mega Events" %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+    <nav class="breadcrumb bg-light mb-4">
+        <a class="breadcrumb-item text-dark" href="{% url 'index' %}">
+            {% trans "Home" %}
+        </a>
+
+        <span class="breadcrumb-item active">
+            {% if LANGUAGE_CODE == "ar" and category.name_ar %}
+                {{ category.name_ar }}
+            {% else %}
+                {{ category.name }}
+            {% endif %}
+        </span>
+    </nav>
+
+    <div class="home-section-head compact-head mb-4">
+        <div class="home-section-head__content">
+            <h2 class="home-section-head__title">
+                {% if LANGUAGE_CODE == "ar" and category.name_ar %}
+                    {{ category.name_ar }}
+                {% else %}
+                    {{ category.name }}
+                {% endif %}
+            </h2>
+        </div>
+    </div>
+
+    {% if products %}
+    <div class="product_section_2">
+        <div class="row product-grid-row">
+            {% for product in products %}
+            <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                {% include "partials/product_card.html" with product=product %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="mega-empty-state">
+        <div class="mega-empty-icon">
+            <i class="fa-solid fa-box-open"></i>
+        </div>
+
+        <h4>{% trans "No products found" %}</h4>
+        <p>{% trans "Please check again later." %}</p>
+
+        <a href="{% url 'index' %}" class="mega-empty-btn">
+            {% trans "Back Home" %}
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,581 @@
+# Arabic translations for Mega Events.
+# Copyright (C) 2026
+# This file is distributed under the same license as the Mega Events package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mega Events 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-26 14:16+0400\n"
+"PO-Revision-Date: 2026-04-26 14:20+0400\n"
+"Last-Translator: Mega Events <MeggaEvents@gmail.com>\n"
+"Language-Team: Arabic <ar@megaevents.com>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: megaevents/settings.py
+msgid "English"
+msgstr "الإنجليزية"
+
+#: megaevents/settings.py
+msgid "Arabic"
+msgstr "العربية"
+
+msgid "Mega Events"
+msgstr "ميغا إيفنتس"
+
+msgid "Megga Events"
+msgstr "ميغا إيفنتس"
+
+msgid "Flowers • Event Rentals • Party Services"
+msgstr "زهور • تأجير للمناسبات • خدمات الحفلات"
+
+msgid "Home"
+msgstr "الرئيسية"
+
+
+
+msgid "Cart"
+msgstr "السلة"
+
+
+msgid "Search"
+msgstr "بحث"
+
+
+
+msgid "Your Cart"
+msgstr "سلتك"
+
+msgid "item"
+msgstr "عنصر"
+
+msgid "Loading cart..."
+msgstr "جاري تحميل السلة..."
+
+msgid "For Sale"
+msgstr "للبيع"
+
+msgid "For Rent"
+msgstr "للإيجار"
+
+msgid "Service"
+msgstr "خدمة"
+
+msgid "Sold Out"
+msgstr "غير متوفر"
+
+msgid "Out of stock"
+msgstr "غير متوفر"
+
+msgid "Add to cart"
+msgstr "أضف إلى السلة"
+
+msgid "Rent Now"
+msgstr "استأجر الآن"
+
+msgid "Book Now"
+msgstr "احجز الآن"
+
+msgid "Book Service"
+msgstr "احجز الخدمة"
+
+msgid "Add Rental Request"
+msgstr "إضافة طلب إيجار"
+
+msgid "Event Date"
+msgstr "تاريخ المناسبة"
+
+msgid "Start Time"
+msgstr "وقت البداية"
+
+msgid "End Time"
+msgstr "وقت النهاية"
+
+msgid "Venue / Location"
+msgstr "مكان المناسبة"
+
+msgid "City"
+msgstr "المدينة"
+
+msgid "Extra Notes"
+msgstr "ملاحظات إضافية"
+
+msgid "Price"
+msgstr "السعر"
+
+msgid "Price Per Hour"
+msgstr "السعر بالساعة"
+
+msgid "Price Per Day"
+msgstr "السعر باليوم"
+
+msgid "Price Per Event"
+msgstr "السعر لكل مناسبة"
+
+msgid "Request Quote"
+msgstr "طلب عرض سعر"
+
+msgid "per hour"
+msgstr "بالساعة"
+
+msgid "per day"
+msgstr "باليوم"
+
+msgid "per event"
+msgstr "لكل مناسبة"
+
+msgid "Your cart is empty"
+msgstr "سلتك فارغة"
+
+msgid "Add flowers, rentals, or services and they will appear here."
+msgstr "أضف الزهور أو الإيجارات أو الخدمات وستظهر هنا."
+
+msgid "Continue shopping"
+msgstr "متابعة التسوق"
+
+msgid "Subtotal"
+msgstr "المجموع الفرعي"
+
+msgid "Shipping"
+msgstr "التوصيل"
+
+msgid "Total"
+msgstr "الإجمالي"
+
+msgid "View Cart"
+msgstr "عرض السلة"
+
+msgid "Checkout"
+msgstr "إتمام الطلب"
+
+msgid "Your Shopping Cart"
+msgstr "سلة التسوق الخاصة بك"
+
+msgid "Review your flowers, rentals, and services before checkout."
+msgstr "راجع الزهور والإيجارات والخدمات قبل إتمام الطلب."
+
+msgid "Qty"
+msgstr "الكمية"
+
+msgid "Remove"
+msgstr "إزالة"
+
+msgid "Quote"
+msgstr "عرض سعر"
+
+msgid "Cart Summary"
+msgstr "ملخص السلة"
+
+msgid "Proceed to Checkout"
+msgstr "المتابعة لإتمام الطلب"
+
+msgid "Looks like you have not added any flowers, rentals, or services yet."
+msgstr "يبدو أنك لم تضف أي زهور أو إيجارات أو خدمات بعد."
+
+msgid "Start Shopping"
+msgstr "ابدأ التسوق"
+
+msgid "Fresh & Elegant"
+msgstr "طازج وأنيق"
+
+msgid "Featured Flowers"
+msgstr "زهور مميزة"
+
+msgid "Beautiful flower arrangements for gifts, weddings, parties, and special moments."
+msgstr "تنسيقات زهور جميلة للهدايا وحفلات الزفاف والمناسبات واللحظات الخاصة."
+
+msgid "For Parties & Events"
+msgstr "للحفلات والمناسبات"
+
+msgid "Rental Items"
+msgstr "عناصر للإيجار"
+
+msgid "Rent bounce castles, party equipment, decor items, and event essentials."
+msgstr "استأجر النطاطات ومعدات الحفلات وديكورات المناسبات والمستلزمات الأساسية."
+
+msgid "Complete Event Support"
+msgstr "دعم كامل للمناسبات"
+
+msgid "Event Services"
+msgstr "خدمات المناسبات"
+
+msgid "Book event setup, decoration, sound, entertainment, and support services."
+msgstr "احجز خدمات تجهيز المناسبات والديكور والصوت والترفيه والدعم."
+
+msgid "Shop Flowers"
+msgstr "تسوق الزهور"
+
+msgid "Rent Event Items"
+msgstr "استأجر مستلزمات المناسبات"
+
+msgid "Trending Now"
+msgstr "الأكثر رواجاً"
+
+msgid "Luxury Packages"
+msgstr "باقات فاخرة"
+
+msgid "Smart Search"
+msgstr "بحث ذكي"
+
+msgid "Find Your Perfect Product"
+msgstr "ابحث عن المنتج المناسب لك"
+
+msgid "Search by product name, category, flowers, rentals, services, or any keyword."
+msgstr "ابحث باسم المنتج أو القسم أو الزهور أو الإيجارات أو الخدمات أو أي كلمة."
+
+msgid "Last Name"
+msgstr "اسم العائلة"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Phone"
+msgstr "رقم الهاتف"
+
+msgid "WhatsApp"
+msgstr "واتساب"
+
+msgid "Address"
+msgstr "العنوان"
+
+msgid "Country"
+msgstr "الدولة"
+
+msgid "Order Total"
+msgstr "إجمالي الطلب"
+
+msgid "Payment"
+msgstr "الدفع"
+
+msgid "Cash on Delivery"
+msgstr "الدفع عند الاستلام"
+
+msgid "Place Order"
+msgstr "تأكيد الطلب"
+
+msgid "Product Details"
+msgstr "تفاصيل المنتج"
+
+msgid "You May Also Like"
+msgstr "قد يعجبك أيضاً"
+
+msgid "More To Explore"
+msgstr "المزيد للاستكشاف"
+
+msgid "Call Us"
+msgstr "اتصل بنا"
+
+msgid "Share"
+msgstr "مشاركة"
+
+msgid "Premium selection"
+msgstr "اختيار مميز"
+
+msgid "This product is currently out of stock."
+msgstr "هذا المنتج غير متوفر حالياً."
+
+msgid "Your Name / Contact Person"
+msgstr "اسمك / الشخص المسؤول"
+
+msgid "Phone / WhatsApp"
+msgstr "الهاتف / واتساب"
+
+msgid "Company Name"
+msgstr "اسم الشركة"
+
+msgid "Enter your booking details"
+msgstr "أدخل تفاصيل الحجز"
+
+msgid "Rent Item"
+msgstr "استئجار عنصر"
+
+msgid "Add Request"
+msgstr "إضافة الطلب"
+
+msgid "Enter contact person name"
+msgstr "أدخل اسم الشخص المسؤول"
+
+msgid "Optional"
+msgstr "اختياري"
+
+msgid "Home, hall, hotel, school, garden..."
+msgstr "منزل، قاعة، فندق، مدرسة، حديقة..."
+
+msgid "Optional notes..."
+msgstr "ملاحظات اختيارية..."
+
+msgid "Add To Cart"
+msgstr "أضف إلى السلة"
+
+msgid "You save"
+msgstr "توفر"
+
+msgid "Deposit"
+msgstr "العربون"
+
+msgid "Rental Details"
+msgstr "تفاصيل الإيجار"
+
+
+msgid "Event date and venue are required before adding this item."
+msgstr "تاريخ المناسبة والمكان مطلوبان قبل إضافة هذا العنصر."
+
+msgid "Minimum rental hours"
+msgstr "الحد الأدنى لساعات الإيجار"
+
+msgid "Maximum rental days"
+msgstr "الحد الأقصى لأيام الإيجار"
+
+msgid "Provider city"
+msgstr "مدينة المزود"
+
+msgid "Orders"
+msgstr "الطلبات"
+
+msgid "Manage sales, rental bookings, and service bookings from the main store."
+msgstr "إدارة طلبات البيع وحجوزات الإيجار وحجوزات الخدمات من المتجر الرئيسي."
+
+msgid "Customer"
+msgstr "العميل"
+
+msgid "Order Type"
+msgstr "نوع الطلب"
+
+msgid "Location"
+msgstr "الموقع"
+
+msgid "Status"
+msgstr "الحالة"
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "Actions"
+msgstr "الإجراءات"
+
+msgid "Not provided"
+msgstr "غير متوفر"
+
+msgid "Sale"
+msgstr "بيع"
+
+msgid "Rental"
+msgstr "إيجار"
+
+msgid "No items"
+msgstr "لا توجد عناصر"
+
+msgid "Delete Order"
+msgstr "حذف الطلب"
+
+msgid "Are you sure you want to delete order"
+msgstr "هل أنت متأكد أنك تريد حذف الطلب"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Order Detail"
+msgstr "تفاصيل الطلب"
+
+msgid "Order"
+msgstr "طلب"
+
+msgid "Detailed customer order, rental, and service booking information."
+msgstr "معلومات تفصيلية عن طلب العميل وحجز الإيجار أو الخدمة."
+
+msgid "Back to Orders"
+msgstr "العودة إلى الطلبات"
+
+msgid "Customer Information"
+msgstr "معلومات العميل"
+
+msgid "Name"
+msgstr "الاسم"
+
+msgid "Order Summary"
+msgstr "ملخص الطلب"
+
+msgid "Order ID"
+msgstr "رقم الطلب"
+
+msgid "VAT"
+msgstr "ضريبة القيمة المضافة"
+
+msgid "Ordered Items / Bookings"
+msgstr "العناصر المطلوبة / الحجوزات"
+
+msgid "Image"
+msgstr "الصورة"
+
+msgid "Item"
+msgstr "العنصر"
+
+msgid "Type"
+msgstr "النوع"
+
+msgid "Booking Details"
+msgstr "تفاصيل الحجز"
+
+msgid "Venue"
+msgstr "المكان"
+
+msgid "Normal product sale"
+msgstr "بيع منتج عادي"
+
+msgid "Deleted Product"
+msgstr "منتج محذوف"
+
+msgid "No items found for this order."
+msgstr "لم يتم العثور على عناصر لهذا الطلب."
+
+msgid "Grand Total"
+msgstr "الإجمالي الكلي"
+
+msgid "Are you sure you want to permanently delete order"
+msgstr "هل أنت متأكد أنك تريد حذف هذا الطلب نهائياً"
+
+msgid "Products"
+msgstr "المنتجات"
+
+msgid "For rentals/services, this can be your preferred delivery or contact address."
+msgstr "بالنسبة للإيجارات أو الخدمات، يمكن أن يكون هذا عنوان التسليم أو التواصل المفضل لديك."
+
+msgid "United Arab Emirates"
+msgstr "الإمارات العربية المتحدة"
+
+msgid "Saudi Arabia"
+msgstr "المملكة العربية السعودية"
+
+msgid "Qatar"
+msgstr "قطر"
+
+msgid "Oman"
+msgstr "عُمان"
+
+msgid "Bahrain"
+msgstr "البحرين"
+
+msgid "Kuwait"
+msgstr "الكويت"
+
+
+msgid "Order Received Successfully"
+msgstr "تم استلام الطلب بنجاح"
+
+msgid "Order received successfully! Thank you for your request. Our team will contact you shortly to confirm the details."
+msgstr "تم استلام طلبك بنجاح! شكراً لك، سيتواصل معك فريقنا قريباً لتأكيد التفاصيل."
+
+msgid "Continue Shopping"
+msgstr "متابعة التسوق"
+
+msgid "Close"
+msgstr "إغلاق"
+
+msgid "Mega Events | Flowers, Rentals & Services"
+msgstr "ميجا إيفنتس | زهور وتأجير وخدمات"
+
+msgid "Flowers • Rentals • Services"
+msgstr "زهور • تأجير • خدمات"
+
+msgid "Shop Now"
+msgstr "تسوق الآن"
+
+msgid "Make Every Event Beautiful"
+msgstr "اجعل كل مناسبة جميلة"
+
+msgid "Shop flowers, rent party items, and book event services."
+msgstr "تسوق الزهور، واستأجر مستلزمات الحفلات، واحجز خدمات المناسبات."
+
+msgid "Categories"
+msgstr "الأقسام"
+
+msgid "New Arrivals"
+msgstr "وصل حديثاً"
+
+msgid "Flowers"
+msgstr "الزهور"
+
+msgid "Rentals"
+msgstr "التأجير"
+
+msgid "Services"
+msgstr "الخدمات"
+
+msgid "Packages"
+msgstr "الباقات"
+
+msgid "Top Orders"
+msgstr "الأكثر طلباً"
+
+msgid "Trending"
+msgstr "الرائج"
+
+msgid "View All"
+msgstr "عرض الكل"
+
+
+msgid "Access Denied"
+msgstr "تم رفض الوصول"
+
+msgid "Oops! You do not have permission to access this page. This area is reserved for administrators only."
+msgstr "عذراً! ليس لديك صلاحية للوصول إلى هذه الصفحة. هذه المنطقة مخصصة للمسؤولين فقط."
+
+msgid "Go to Home Page"
+msgstr "الذهاب إلى الصفحة الرئيسية"
+
+msgid "Page Not Found"
+msgstr "الصفحة غير موجودة"
+
+msgid "We are sorry, the page you are looking for does not exist. You can return home or search for products."
+msgstr "نعتذر، الصفحة التي تبحث عنها غير موجودة. يمكنك العودة للرئيسية أو البحث عن المنتجات."
+
+msgid "Go Back Home"
+msgstr "العودة للرئيسية"
+
+msgid "Search Results"
+msgstr "نتائج البحث"
+
+msgid "Results for"
+msgstr "نتائج البحث عن"
+
+msgid "Search Products"
+msgstr "البحث عن المنتجات"
+
+msgid "Search flowers, rentals, services, categories..."
+msgstr "ابحث عن الزهور، التأجير، الخدمات، الأقسام..."
+
+msgid "We could not find a direct match for"
+msgstr "لم نتمكن من العثور على نتيجة مطابقة لـ"
+
+msgid "Try searching for flowers, rentals, services, or categories."
+msgstr "جرب البحث عن الزهور أو التأجير أو الخدمات أو الأقسام."
+
+msgid "Try these instead"
+msgstr "جرب هذه بدلاً من ذلك"
+
+msgid "Try Another Search"
+msgstr "جرب بحثاً آخر"
+
+msgid "Popular Searches"
+msgstr "عمليات البحث الشائعة"
+
+msgid "Wishlist"
+msgstr "قائمة الرغبات"
+
+msgid "Your wishlist is empty"
+msgstr "قائمة الرغبات فارغة"
+
+msgid "Save flowers, rentals, and services you like so you can find them later."
+msgstr "احفظ الزهور والإيجارات والخدمات التي تعجبك لتجدها لاحقاً."
+
+msgid "Explore Products"
+msgstr "استكشاف المنتجات"
+
+
+msgid "Clients"
+msgstr "عملاؤنا"

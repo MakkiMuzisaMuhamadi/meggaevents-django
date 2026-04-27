@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load i18n %}
+
+{% block title %}{% trans "Search Results" %} | {% trans "Mega Events" %}{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+    <div class="home-section-head compact-head mb-4">
+        <div class="home-section-head__content">
+            <h2 class="home-section-head__title">
+                {% if query %}
+                    {% trans "Results for" %} "{{ query }}"
+                {% else %}
+                    {% trans "Search Products" %}
+                {% endif %}
+            </h2>
+        </div>
+    </div>
+
+    <div class="search-results-topbar mb-4">
+        <form action="{% url 'product_search' %}" method="get" class="modern-search-form">
+            <div class="modern-search-input-wrap">
+                <i class="fa fa-search modern-search-icon"></i>
+
+                <input
+                    type="text"
+                    name="q"
+                    class="modern-search-input"
+                    value="{{ query }}"
+                    placeholder="{% trans 'Search flowers, rentals, services, categories...' %}"
+                    autocomplete="off"
+                    required
+                >
+
+                {% if item_type %}
+                    <input type="hidden" name="type" value="{{ item_type }}">
+                {% endif %}
+
+                <button class="modern-search-btn" type="submit">
+                    {% trans "Search" %}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if products %}
+    <div class="product_section">
+        <div class="product_section_2">
+            <div class="row product-grid-row">
+                {% for product in products %}
+                <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                    {% include "partials/product_card.html" with product=product %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="search-empty-box text-center">
+        <h4 class="mb-2">{% trans "No products found" %}</h4>
+
+        {% if query %}
+        <p class="text-muted mb-3">
+            {% trans "We could not find a direct match for" %}
+            <strong>"{{ query }}"</strong>.
+        </p>
+        {% else %}
+        <p class="text-muted mb-3">
+            {% trans "Try searching for flowers, rentals, services, or categories." %}
+        </p>
+        {% endif %}
+
+        {% if suggestions %}
+        <div class="mb-3">
+            <p class="mb-2">{% trans "Try these instead" %}:</p>
+
+            <div class="search-chip-wrap justify-content-center">
+                {% for item in suggestions %}
+                <a href="{% url 'product_search' %}?q={{ item }}" class="search-chip">
+                    {{ item }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <a href="{% url 'search' %}" class="btn btn-dark mt-2">
+            {% trans "Try Another Search" %}
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.search-results-topbar {
+    background: #fff;
+    border: 1px solid #eadcc8;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.04);
+}
+
+.modern-search-form {
+    margin: 0;
+}
+
+.modern-search-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e3d6c2;
+    border-radius: 999px;
+    overflow: hidden;
+    min-height: 58px;
+}
+
+.modern-search-icon {
+    position: absolute;
+    left: 22px;
+    color: #9a8565;
+    font-size: 16px;
+}
+
+html[dir="rtl"] .modern-search-icon {
+    left: auto;
+    right: 22px;
+}
+
+.modern-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 0 20px 0 54px;
+    height: 58px;
+    font-size: 15px;
+    background: transparent;
+}
+
+html[dir="rtl"] .modern-search-input {
+    padding: 0 54px 0 20px;
+}
+
+.modern-search-btn {
+    border: none;
+    height: 46px;
+    margin-right: 6px;
+    padding: 0 22px;
+    border-radius: 999px;
+    background: #111;
+    color: #fff;
+    font-weight: 700;
+}
+
+html[dir="rtl"] .modern-search-btn {
+    margin-right: 0;
+    margin-left: 6px;
+}
+
+.modern-search-btn:hover {
+    background: #c6a46a;
+    color: #111;
+}
+
+.search-empty-box {
+    background: linear-gradient(135deg, #fffaf3, #f8efe3);
+    border: 1px solid #eadcc8;
+    border-radius: 22px;
+    padding: 36px 24px;
+}
+
+.search-chip-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.search-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 15px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid #e3d6c2;
+    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.search-chip:hover {
+    background: #f8efe3;
+    color: #111;
+}
+
+@media (max-width: 576px) {
+    .modern-search-input-wrap {
+        min-height: 52px;
+    }
+
+    .modern-search-input {
+        height: 52px;
+        font-size: 14px;
+        padding-left: 48px;
+    }
+
+    html[dir="rtl"] .modern-search-input {
+        padding-left: 20px;
+        padding-right: 48px;
+    }
+
+    .modern-search-btn {
+        height: 40px;
+        padding: 0 15px;
+        font-size: 13px;
+    }
+
+    .modern-search-icon {
+        left: 18px;
+        font-size: 14px;
+    }
+
+    html[dir="rtl"] .modern-search-icon {
+        left: auto;
+        right: 18px;
+    }
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load i18n %}
+
+{% block title %}{% trans "Checkout" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .checkout-section-title {
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+    }
+
+    .checkout-card {
+        background: #f8f9fa;
+        padding: 28px;
+        border-radius: 18px;
+        border: 1px solid #eee;
+        margin-bottom: 28px;
+    }
+
+    .checkout-card label {
+        font-weight: 700;
+        font-size: 13px;
+        color: #111;
+    }
+
+    .checkout-card .form-control,
+    .checkout-card .custom-select {
+        height: 46px;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+    }
+
+    .checkout-summary-item {
+        padding: 10px 0;
+        border-bottom: 1px solid #e8e8e8;
+    }
+
+    .checkout-old-price {
+        text-decoration: line-through;
+        opacity: .65;
+        margin-left: 6px;
+    }
+
+    html[dir="rtl"] .checkout-old-price {
+        margin-left: 0;
+        margin-right: 6px;
+    }
+
+    .checkout-booking-meta {
+        font-size: 12px;
+        color: #666;
+        margin-top: 4px;
+        line-height: 1.7;
+    }
+
+    .checkout-submit-btn {
+        width: 100%;
+        min-height: 48px;
+        border-radius: 14px;
+        font-weight: 800;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="{% url 'index' %}">
+                    {% trans "Home" %}
+                </a>
+                <a class="breadcrumb-item text-dark" href="{% url 'cart' %}">
+                    {% trans "Cart" %}
+                </a>
+                <span class="breadcrumb-item active">
+                    {% trans "Checkout" %}
+                </span>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<form action="{% url 'place_order' %}" method="post">
+    {% csrf_token %}
+
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+
+            <div class="col-lg-8">
+                <h5 class="checkout-section-title">
+                    {% trans "Billing Address" %}
+                </h5>
+
+                <div class="checkout-card">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>
+                                {% trans "First Name" %} <span class="text-danger">*</span>
+                            </label>
+                            <input class="form-control" type="text" name="first_name" id="firstName" required>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>{% trans "Last Name" %}</label>
+                            <input class="form-control" type="text" name="last_name" id="lastName">
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <label>{% trans "Email" %}</label>
+                            <input class="form-control" name="email" type="email">
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>
+                                {% trans "Phone" %} <span class="text-danger">*</span>
+                            </label>
+                            <input class="form-control" name="phone" type="text" id="phone" required>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>{% trans "WhatsApp" %}</label>
+                            <input class="form-control" name="whatsapp" type="text" id="whatsapp">
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <label>{% trans "Address" %}</label>
+                            <input class="form-control" name="address" type="text" id="address">
+                            <small class="text-muted">
+                                {% trans "For rentals/services, this can be your preferred delivery or contact address." %}
+                            </small>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>{% trans "City" %}</label>
+                            <input class="form-control" name="city" type="text" id="city" placeholder="Dubai">
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>{% trans "Country" %}</label>
+                            <select class="custom-select" name="country" id="country">
+                                <option value="United Arab Emirates" selected>{% trans "United Arab Emirates" %}</option>
+                                <option value="Saudi Arabia">{% trans "Saudi Arabia" %}</option>
+                                <option value="Qatar">{% trans "Qatar" %}</option>
+                                <option value="Oman">{% trans "Oman" %}</option>
+                                <option value="Bahrain">{% trans "Bahrain" %}</option>
+                                <option value="Kuwait">{% trans "Kuwait" %}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <h5 class="checkout-section-title">
+                    {% trans "Order Total" %}
+                </h5>
+
+                <div class="checkout-card">
+                    <div class="border-bottom pb-2">
+                        <h6 class="mb-3">{% trans "Products" %}</h6>
+
+                        {% for item in cart_items %}
+                        <div class="checkout-summary-item">
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-1">
+                                    {% if LANGUAGE_CODE == "ar" and item.product.product_name_ar %}
+                                        {{ item.product.product_name_ar }}
+                                    {% else %}
+                                        {{ item.product.product_name }}
+                                    {% endif %}
+                                    × {{ item.quantity }}
+                                </p>
+
+                                <p class="mb-1 font-weight-bold">
+                                    {% if item.product.price_type == "QUOTE" %}
+                                        {% trans "Quote" %}
+                                    {% elif item.product.has_price %}
+                                        {{ item.product.currency }} {{ item.total_price|intcomma }}
+                                    {% else %}
+                                        <span class="text-muted">—</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+
+                            <div>
+                                {% if item.product.price_type == "QUOTE" %}
+                                    <small class="text-muted">{% trans "Request Quote" %}</small>
+                                {% elif item.product.has_price %}
+                                    {% if item.product.has_discount %}
+                                        <small class="text-muted">
+                                            {{ item.product.currency }} {{ item.unit_price|intcomma }}
+                                            <span class="checkout-old-price">
+                                                {{ item.product.currency }} {{ item.old_unit_price|intcomma }}
+                                            </span>
+                                        </small>
+                                    {% else %}
+                                        <small class="text-muted">
+                                            {{ item.product.currency }} {{ item.unit_price|intcomma }}
+                                        </small>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+
+                            {% if item.product.item_type == "RENTAL" or item.product.item_type == "SERVICE" %}
+                            <div class="checkout-booking-meta">
+                                {% if item.event_date %}
+                                <div>
+                                    <i class="fa-regular fa-calendar mr-1"></i>
+                                    {% trans "Event Date" %}: {{ item.event_date }}
+                                </div>
+                                {% endif %}
+
+                                {% if item.venue %}
+                                <div>
+                                    <i class="fa-solid fa-location-dot mr-1"></i>
+                                    {% trans "Venue" %}: {{ item.venue }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% empty %}
+                        <div class="text-muted">
+                            {% trans "Your cart is empty" %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="border-bottom pt-3 pb-2">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h6>{% trans "Subtotal" %}</h6>
+                            <h6>AED {{ subtotal|intcomma }}</h6>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">{% trans "Shipping" %}</h6>
+                            <h6 class="font-weight-medium">AED {{ shipping|intcomma }}</h6>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5>{% trans "Total" %}</h5>
+                            <h5>AED {{ total_price|intcomma }}</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <h5 class="checkout-section-title">
+                        {% trans "Payment" %}
+                    </h5>
+
+                    <div class="checkout-card">
+                        <div class="form-group mb-4">
+                            <div class="custom-control custom-radio">
+                                <input type="radio"
+                                       class="custom-control-input"
+                                       id="cashOnDelivery"
+                                       name="payment_method"
+                                       value="cash_on_delivery"
+                                       checked>
+                                <label class="custom-control-label" for="cashOnDelivery">
+                                    {% trans "Cash on Delivery" %}
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary checkout-submit-btn">
+                            {% trans "Place Order" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+{% endblock %}

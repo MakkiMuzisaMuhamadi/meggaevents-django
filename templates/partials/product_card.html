@@ -1,0 +1,134 @@
+{% load humanize %}
+{% load i18n %}
+
+<div class="product_box dlx-product-card product-card-loading">
+    {% if product.is_out_of_stock %}
+    <div class="out-of-stock-overlay">
+        <span class="out-of-stock-text">{% trans "Sold Out" %}</span>
+    </div>
+    {% endif %}
+
+    <a href="{% url 'product_detail' product.id %}" class="product_image_link dlx-product-image-wrap">
+        <span class="product-image-shimmer"></span>
+
+        {% if product.image %}
+            <img
+                src="{{ product.image.url }}"
+                class="image_1 product-card-img"
+                alt="{{ product.product_name }}"
+            >
+        {% else %}
+            <div class="product-card-no-image">
+                <i class="fa-solid fa-image"></i>
+            </div>
+        {% endif %}
+    </a>
+
+    <div class="dlx-product-body">
+        <div class="mb-2">
+            <span class="dlx-discount-badge">
+                {% if product.item_type == "SALE" %}
+                    {% trans "For Sale" %}
+                {% elif product.item_type == "RENTAL" %}
+                    {% trans "For Rent" %}
+                {% else %}
+                    {% trans "Service" %}
+                {% endif %}
+            </span>
+        </div>
+
+        <a href="{% url 'product_detail' product.id %}" class="dlx-product-name-link">
+            <h3 class="bursh_text dlx-product-title">
+                {% if LANGUAGE_CODE == "ar" and product.product_name_ar %}
+                    {{ product.product_name_ar }}
+                {% else %}
+                    {{ product.product_name }}
+                {% endif %}
+            </h3>
+        </a>
+
+        {% if product.category %}
+        <div class="mb-2">
+            <small class="text-muted">
+                {% if LANGUAGE_CODE == "ar" and product.category.name_ar %}
+                    {{ product.category.name_ar }}
+                {% else %}
+                    {{ product.category.name }}
+                {% endif %}
+            </small>
+        </div>
+        {% endif %}
+
+        {% if product.price_type == "QUOTE" %}
+        <div class="price_wrap dlx-price-wrap">
+            <div class="dlx-price-main">{% trans "Request Quote" %}</div>
+        </div>
+        {% elif product.has_price %}
+        <div class="price_wrap dlx-price-wrap">
+            {% if product.has_discount %}
+                <div class="dlx-price-main">
+                    {{ product.currency }} {{ product.discounted_price|intcomma }}
+                </div>
+
+                <div class="old_price_row dlx-old-price-row">
+                    <span class="old_price_text">
+                        {{ product.currency }} {{ product.old_price|intcomma }}
+                    </span>
+                    <span class="discount_badge dlx-discount-badge">
+                        -{{ product.discount_percent_display }}%
+                    </span>
+                </div>
+            {% else %}
+                <div class="dlx-price-main">
+                    {{ product.currency }} {{ product.price|intcomma }}
+                </div>
+            {% endif %}
+
+            {% if product.price_type == "PER_HOUR" %}
+                <small class="text-muted">{% trans "per hour" %}</small>
+            {% elif product.price_type == "PER_DAY" %}
+                <small class="text-muted">{% trans "per day" %}</small>
+            {% elif product.price_type == "PER_EVENT" %}
+                <small class="text-muted">{% trans "per event" %}</small>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if not product.is_out_of_stock %}
+        <div class="dlx-card-btn-wrap">
+            {% if product.item_type == "SALE" %}
+                <form action="{% url 'add_to_cart' product.id %}" method="post" class="ajax-add-to-cart-form">
+                    {% csrf_token %}
+                    <button data-product-id="{{ product.id }}" type="submit" class="custom-toast success-toast dlx-cart-btn">
+                        <i class="fa fa-shopping-bag mr-2"></i> {% trans "Add to cart" %}
+                    </button>
+                </form>
+            {% else %}
+                <button
+                    type="button"
+                    class="custom-toast success-toast dlx-cart-btn open-booking-drawer-btn"
+                    data-product-id="{{ product.id }}"
+                    data-product-type="{{ product.item_type }}"
+                    data-product-name="{% if LANGUAGE_CODE == 'ar' and product.product_name_ar %}{{ product.product_name_ar|escapejs }}{% else %}{{ product.product_name|escapejs }}{% endif %}"
+                    data-product-image="{% if product.image %}{{ product.image.url }}{% endif %}"
+                    data-product-price="{% if product.price_type == 'QUOTE' %}{% trans 'Request Quote' %}{% elif product.has_price %}{{ product.currency }} {{ product.discounted_price|intcomma }}{% else %}{% endif %}"
+                    data-action-url="{% url 'add_to_cart' product.id %}"
+                >
+                    <i class="fa fa-calendar-check mr-2"></i>
+                    {% if product.item_type == "RENTAL" %}
+                        {% trans "Rent Now" %}
+                    {% else %}
+                        {% trans "Book Now" %}
+                    {% endif %}
+                </button>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="dlx-card-btn-wrap">
+            <button type="button" class="dlx-cart-btn dlx-cart-btn-disabled" disabled>
+                {% trans "Out of stock" %}
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>

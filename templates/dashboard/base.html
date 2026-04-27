@@ -1,0 +1,281 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>MeggaEvents Admin Dashboard</title>
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <!-- Vendor CSS -->
+  <link rel="stylesheet" href="{% static 'dashboard/vendors/css/vendor.bundle.base.css' %}" />
+  <link rel="stylesheet" href="{% static 'dashboard/vendors/css/vendor.bundle.addons.css' %}" />
+
+  <!-- Dashboard CSS -->
+  <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'dashboard/css/custo.css' %}" />
+
+  <!-- Plugins -->
+  <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css" />
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{% static 'dashboard/images/favicon.png' %}" />
+<style>
+  
+</style>
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body class="sidebar-fixed">
+  <div class="container-scroller">
+
+    <!-- NAVBAR -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row default-layout-navbar">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo d-none d-lg-flex" href="{% url 'index' %}">
+          <img src="{% static 'dashboard/images/logo2-MeggaEvents.jpeg' %}" style="height:50px;">
+        </a>
+      </div>
+
+      <div class="navbar-menu-wrapper d-flex align-items-center">
+
+      <button class="navbar-toggler align-self-center d-none d-lg-flex" type="button" data-toggle="minimize">
+        <span class="fas fa-bars"></span>
+      </button>
+
+      <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+        <span class="fas fa-bars"></span>
+      </button>
+
+        <!-- HEADER -->
+        <div class="header-title">
+          <h5 class="mb-0 font-weight-bold text-primary">
+            <i class="fas fa-store"></i> MeggaEvents Dashboard
+          </h5>
+          <small class="text-muted">Beauty • Cosmetics • Pharmacy</small>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <ul class="navbar-nav navbar-nav-right d-flex align-items-center">
+
+          <!-- PROFILE -->
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+              <img src="{% static 'dashboard/images/noimage.jpg' %}" />
+              <span class="nav-profile-name d-none d-md-inline">
+                {{ request.user.username }}
+              </span>
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown">
+              <a class="dropdown-item" href="#">
+                <i class="fas fa-user"></i> Profile
+              </a>
+
+              <div class="dropdown-divider"></div>
+
+              <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="dropdown-item btn btn-link">
+                  <i class="fas fa-power-off"></i> Logout
+                </button>
+              </form>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </nav>
+
+    <!-- PAGE -->
+    <div class="container-fluid page-body-wrapper">
+
+      <!-- SIDEBAR -->
+      <nav class="sidebar sidebar-offcanvas">
+        <ul class="nav">
+
+          <li class="nav-item nav-profile">
+            <div class="nav-link">
+              <div class="profile-image">
+                <img src="{% static 'dashboard/images/logo-MeggaEvents.jpeg' %}">
+              </div>
+              <div class="profile-name">
+                <p class="name">MeggaEvents System</p>
+                <p class="designation">Admin</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard' %}">
+              <i class="fas fa-home menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+
+<li class="nav-item">
+  <a class="nav-link" data-toggle="collapse" href="#products-menu" aria-expanded="false" aria-controls="products-menu">
+    <i class="fas fa-box-open menu-icon"></i>
+    <span class="menu-title">Products</span>
+    <i class="menu-arrow"></i>
+  </a>
+
+        <div class="collapse" id="products-menu">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'admin_products' %}">
+                <i class="fas fa-list-ul menu-icon mr-2"></i>
+                All Products
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'admin_add_product' %}">
+                <i class="fas fa-plus-circle menu-icon mr-2"></i>
+                Add Product
+              </a>
+            </li>
+
+          </ul>
+        </div>
+      </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_categories' %}">
+              <i class="fas fa-layer-group menu-icon"></i>
+              <span class="menu-title">Categories</span>
+            </a>
+          </li>
+
+
+
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#orders-menu" aria-expanded="false" aria-controls="orders-menu">
+            <i class="fas fa-shopping-cart menu-icon"></i>
+            <span class="menu-title">Orders</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="orders-menu">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_orders' %}">
+                  <i class="fas fa-list menu-icon"></i> All Orders
+                </a>
+              </li>
+ 
+            </ul>
+          </div>
+        </li>
+
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_slides' %}">
+              <i class="fas fa-images menu-icon"></i>
+              <span class="menu-title">Banners / Slides</span>
+            </a>
+          </li>
+<li class="nav-item">
+  <a class="nav-link" data-toggle="collapse" href="#clients-menu" aria-expanded="false" aria-controls="clients-menu">
+    <i class="fas fa-handshake menu-icon"></i>
+    <span class="menu-title">Client Logos</span>
+    <i class="menu-arrow"></i>
+  </a>
+
+  <div class="collapse" id="clients-menu">
+    <ul class="nav flex-column sub-menu">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_client_logos' %}">
+          <i class="fas fa-list menu-icon mr-2"></i>
+          All Logos
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_add_client_logo' %}">
+          <i class="fas fa-plus-circle menu-icon mr-2"></i>
+          Add Logo
+        </a>
+      </li>
+    </ul>
+  </div>
+</li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_customers' %}">
+              <i class="fas fa-users menu-icon"></i>
+              <span class="menu-title">Customers</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_analytics' %}">
+              <i class="fas fa-chart-line menu-icon"></i>
+              <span class="menu-title">Analytics</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_settings' %}">
+              <i class="fas fa-cog menu-icon"></i>
+              <span class="menu-title">Settings</span>
+            </a>
+          </li>
+
+
+        </ul>
+      </nav>
+
+      <!-- MAIN PANEL -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+
+          {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} mt-2">
+              {{ message }}
+            </div>
+            {% endfor %}
+          {% endif %}
+
+          {% block content %}{% endblock %}
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-between">
+            <span class="text-muted">
+              © {% now "Y" %} MeggaEvents. All rights reserved.
+            </span>
+            <span>
+              Designed by
+              <a href="https://muzaditechnologies.com/" target="_blank">
+                Muzadi Technologies
+              </a>
+            </span>
+          </div>
+        </footer>
+
+      </div>
+    </div>
+  </div>
+
+<script src="{% static 'dashboard/vendors/js/vendor.bundle.base.js' %}"></script>
+<script src="{% static 'dashboard/vendors/js/vendor.bundle.addons.js' %}"></script>
+
+<script src="{% static 'dashboard/js/off-canvas.js' %}"></script>
+<script src="{% static 'dashboard/js/hoverable-collapse.js' %}"></script>
+<script src="{% static 'dashboard/js/misc.js' %}"></script>
+<script src="{% static 'dashboard/js/settings.js' %}"></script>
+<script src="{% static 'dashboard/js/todolist.js' %}"></script>
+<script src="{% static 'dashboard/js/dashboard.js' %}"></script>
+
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
+
+{% block extrajs %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,323 @@
+{% extends "dashboard/base.html" %}
+{% load humanize %}
+{% load i18n %}
+
+{% block title %}{% trans "Order Detail" %}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h4 class="mb-1 font-weight-bold">{% trans "Order" %} #{{ order.id }}</h4>
+    <p class="text-muted mb-0">
+      {% trans "Detailed customer order, rental, and service booking information." %}
+    </p>
+  </div>
+
+  <a href="{% url 'admin_orders' %}" class="btn btn-light border">
+    <i class="fas fa-arrow-left mr-2"></i>{% trans "Back to Orders" %}
+  </a>
+</div>
+
+<div class="row">
+  <div class="col-lg-4 mb-4">
+    <div class="card shadow-sm border-0 rounded-4 h-100">
+      <div class="card-header bg-white border-0">
+        <h5 class="mb-0">{% trans "Customer Information" %}</h5>
+      </div>
+
+      <div class="card-body">
+        <p class="mb-2">
+          <strong>{% trans "Name" %}:</strong>
+          {% if order.first_name or order.last_name %}
+            {{ order.first_name }} {{ order.last_name }}
+          {% else %}
+            <span class="text-muted">{% trans "Not provided" %}</span>
+          {% endif %}
+        </p>
+
+        <p class="mb-2">
+          <strong>{% trans "Email" %}:</strong>
+          {% if order.email %}
+            {{ order.email }}
+          {% else %}
+            <span class="text-muted">{% trans "Not provided" %}</span>
+          {% endif %}
+        </p>
+
+        <p class="mb-2">
+          <strong>{% trans "Phone" %}:</strong>
+          {% if order.phone %}
+            {{ order.phone }}
+          {% else %}
+            <span class="text-muted">{% trans "Not provided" %}</span>
+          {% endif %}
+        </p>
+
+        <p class="mb-2">
+          <strong>{% trans "WhatsApp" %}:</strong>
+          {% if order.whatsapp %}
+            {{ order.whatsapp }}
+          {% else %}
+            <span class="text-muted">{% trans "Not provided" %}</span>
+          {% endif %}
+        </p>
+
+        <p class="mb-2">
+          <strong>{% trans "Address" %}:</strong>
+          {% if order.address %}
+            {{ order.address }}
+          {% else %}
+            <span class="text-muted">{% trans "Not provided" %}</span>
+          {% endif %}
+        </p>
+
+        <p class="mb-2">
+          <strong>{% trans "City" %}:</strong>
+          {% if order.city %}
+            {{ order.city }}
+          {% else %}
+            <span class="text-muted">{% trans "Not provided" %}</span>
+          {% endif %}
+        </p>
+
+        <p class="mb-0">
+          <strong>{% trans "Country" %}:</strong>
+          {% if order.country %}
+            {{ order.country }}
+          {% else %}
+            <span class="text-muted">{% trans "Not provided" %}</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4 mb-4">
+    <div class="card shadow-sm border-0 rounded-4 h-100">
+      <div class="card-header bg-white border-0">
+        <h5 class="mb-0">{% trans "Order Summary" %}</h5>
+      </div>
+
+      <div class="card-body">
+        <p class="mb-2"><strong>{% trans "Order ID" %}:</strong> #{{ order.id }}</p>
+        <p class="mb-2"><strong>{% trans "Date" %}:</strong> {{ order.created_at|date:"M d, Y h:i A" }}</p>
+
+        <p class="mb-2">
+          <strong>{% trans "Status" %}:</strong>
+          {% if order.status == "PENDING" %}
+            <span class="badge badge-warning">{{ order.get_status_display }}</span>
+          {% elif order.status == "QUOTED" %}
+            <span class="badge badge-info">{{ order.get_status_display }}</span>
+          {% elif order.status == "CONFIRMED" %}
+            <span class="badge badge-primary">{{ order.get_status_display }}</span>
+          {% elif order.status == "PROCESSING" %}
+            <span class="badge badge-dark">{{ order.get_status_display }}</span>
+          {% elif order.status == "DELIVERED" %}
+            <span class="badge badge-secondary">{{ order.get_status_display }}</span>
+          {% elif order.status == "COMPLETED" %}
+            <span class="badge badge-success">{{ order.get_status_display }}</span>
+          {% elif order.status == "CANCELLED" %}
+            <span class="badge badge-danger">{{ order.get_status_display }}</span>
+          {% else %}
+            <span class="badge badge-secondary">{{ order.status }}</span>
+          {% endif %}
+        </p>
+
+        <p class="mb-2">
+          <strong>{% trans "Payment" %}:</strong>
+          <span class="badge badge-secondary">{{ order.get_payment_status_display }}</span>
+        </p>
+
+        <hr>
+
+        <p class="mb-2">
+          <strong>{% trans "Subtotal" %}:</strong>
+          {{ order.currency|default:"AED" }} {{ order.subtotal|intcomma }}
+        </p>
+
+        <p class="mb-2">
+          <strong>{% trans "Shipping" %}:</strong>
+          {{ order.currency|default:"AED" }} {{ order.shipping|intcomma }}
+        </p>
+
+        {% if order.vat_amount %}
+        <p class="mb-2">
+          <strong>{% trans "VAT" %}:</strong>
+          {{ order.currency|default:"AED" }} {{ order.vat_amount|intcomma }}
+        </p>
+        {% endif %}
+
+        <p class="mb-0">
+          <strong>{% trans "Total" %}:</strong>
+          <span class="text-success font-weight-bold">
+            {{ order.currency|default:"AED" }} {{ order.total_price|intcomma }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4 mb-4">
+    <div class="card shadow-sm border-0 rounded-4 h-100">
+      <div class="card-header bg-white border-0">
+        <h5 class="mb-0">{% trans "Actions" %}</h5>
+      </div>
+
+      <div class="card-body">
+        <button class="btn btn-danger btn-block" data-toggle="modal" data-target="#deleteMainOrderModal">
+          <i class="fas fa-trash mr-2"></i>{% trans "Delete Order" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0 rounded-4">
+  <div class="card-header bg-white border-0">
+    <h5 class="mb-0">{% trans "Ordered Items / Bookings" %}</h5>
+  </div>
+
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>{% trans "Image" %}</th>
+          <th>{% trans "Item" %}</th>
+          <th>{% trans "Type" %}</th>
+          <th>{% trans "Booking Details" %}</th>
+          <th>{% trans "Qty" %}</th>
+          <th>{% trans "Price" %}</th>
+          <th>{% trans "Subtotal" %}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for item in order_items %}
+        <tr>
+          <td>
+            {% if item.image %}
+              <img src="{{ item.image.url }}" class="rounded" style="width:70px;height:70px;object-fit:cover;">
+            {% else %}
+              <div class="bg-light border rounded d-flex align-items-center justify-content-center" style="width:70px;height:70px;">
+                <i class="fas fa-image text-muted"></i>
+              </div>
+            {% endif %}
+          </td>
+
+          <td>
+            <div class="font-weight-bold text-dark">
+              {% if item.product_name %}
+                {{ item.product_name }}
+              {% elif item.product %}
+                {{ item.product.product_name }}
+              {% else %}
+                <span class="text-muted">{% trans "Deleted Product" %}</span>
+              {% endif %}
+            </div>
+
+            {% if item.product_name_ar %}
+              <small class="text-muted d-block" dir="rtl">
+                {{ item.product_name_ar }}
+              </small>
+            {% endif %}
+          </td>
+
+          <td>
+            {% if item.item_type == "SALE" %}
+              <span class="badge badge-success">{% trans "Sale" %}</span>
+            {% elif item.item_type == "RENTAL" %}
+              <span class="badge badge-primary">{% trans "Rental" %}</span>
+            {% elif item.item_type == "SERVICE" %}
+              <span class="badge badge-info">{% trans "Service" %}</span>
+            {% else %}
+              <span class="badge badge-secondary">{{ item.item_type }}</span>
+            {% endif %}
+          </td>
+
+          <td>
+            {% if item.item_type == "RENTAL" or item.item_type == "SERVICE" %}
+              <div class="booking-detail-box p-2 border rounded bg-light">
+                {% if item.event_date %}
+                  <div class="mb-1">
+                    <strong>{% trans "Event Date" %}:</strong> {{ item.event_date }}
+                  </div>
+                {% endif %}
+
+                {% if item.venue %}
+                  <div class="mb-1">
+                    <strong>{% trans "Venue" %}:</strong> {{ item.venue }}
+                  </div>
+                {% endif %}
+              </div>
+            {% else %}
+              <span class="text-muted">{% trans "Normal product sale" %}</span>
+            {% endif %}
+          </td>
+
+          <td>{{ item.quantity }}</td>
+
+        <td>
+          {% if item.price and item.price > 0 %}
+            {{ item.currency|default:order.currency|default:"AED" }} {{ item.price|intcomma }}
+          {% else %}
+            <span class="text-muted">—</span>
+          {% endif %}
+        </td>
+
+        <td class="font-weight-bold text-success">
+          {% if item.price and item.price > 0 %}
+            {{ item.currency|default:order.currency|default:"AED" }} {{ item.total_price|intcomma }}
+          {% else %}
+            <span class="text-muted">—</span>
+          {% endif %}
+        </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="text-center text-muted py-4">
+            {% trans "No items found for this order." %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <th colspan="6" class="text-right">{% trans "Grand Total" %}:</th>
+          <th class="text-success">
+            {{ order.currency|default:"AED" }} {{ order.total_price|intcomma }}
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteMainOrderModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title">{% trans "Delete Order" %}</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        {% trans "Are you sure you want to permanently delete order" %} <strong>#{{ order.id }}</strong>?
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">
+          {% trans "Cancel" %}
+        </button>
+
+        <form method="post" action="{% url 'admin_delete_order' order.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">
+            {% trans "Delete Order" %}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

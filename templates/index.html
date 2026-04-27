@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load i18n %}
+
+{% block title %}{% trans "Mega Events | Flowers, Rentals & Services" %}{% endblock %}
+
+{% block content %}
+
+<div class="hero-slider-section">
+    <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-ride="carousel">
+
+        {% if banners %}
+        <ol class="carousel-indicators">
+            {% for banner in banners %}
+            <li data-target="#carouselExampleIndicators"
+                data-slide-to="{{ forloop.counter0 }}"
+                class="{% if forloop.first %}active{% endif %}">
+            </li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+
+        <div class="carousel-inner">
+            {% for banner in banners %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="hero-slide" style="background-image: url('{{ banner.image.url }}');">
+                    <div class="hero-overlay"></div>
+
+                    <div class="container">
+                        <div class="hero-content">
+                            <span class="hero-badge">
+                                {% trans "Flowers • Rentals • Services" %}
+                            </span>
+
+                            <h1>
+                                {% if LANGUAGE_CODE == "ar" and banner.title_ar %}
+                                    {{ banner.title_ar }}
+                                {% else %}
+                                    {{ banner.title }}
+                                {% endif %}
+                            </h1>
+
+                            <p>
+                                {% if LANGUAGE_CODE == "ar" and banner.description_ar %}
+                                    {{ banner.description_ar }}
+                                {% else %}
+                                    {{ banner.description }}
+                                {% endif %}
+                            </p>
+
+                            <div class="hero-actions">
+
+
+                                <a href="{% url 'rentals_page' %}" class="hero-btn primary-btn">
+                                    {% trans "Rentals" %}
+                                </a>
+
+                                <a href="{% url 'services_page' %}" class="hero-btn secondary-btn">
+                                    {% trans "Services" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="carousel-item active">
+                <div class="hero-slide" style="background-image: url('{% static 'images/banner-bg.png' %}');">
+                    <div class="hero-overlay"></div>
+
+                    <div class="container">
+                        <div class="hero-content">
+                            <span class="hero-badge">
+                                {% trans "Flowers • Rentals • Services" %}
+                            </span>
+
+                            <h1>{% trans "Make Every Event Beautiful" %}</h1>
+
+                            <p>
+                                {% trans "Shop flowers, rent party items, and book event services." %}
+                            </p>
+
+                            <div class="hero-actions">
+                                <a href="{% url 'search' %}" class="hero-btn primary-btn">
+                                    {% trans "Shop Now" %}
+                                </a>
+
+                                <a href="{% url 'product_search' %}?type=RENTAL" class="hero-btn secondary-btn">
+                                    {% trans "Rentals" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if banners|length > 1 %}
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="hero-nav-btn">
+                <i class="fa fa-angle-left"></i>
+            </span>
+        </a>
+
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="hero-nav-btn">
+                <i class="fa fa-angle-right"></i>
+            </span>
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="product_section">
+    <div class="container">
+
+        {% if categories %}
+        <div class="home-section-head compact-head">
+            <div class="home-section-head__content">
+                <h2 class="home-section-head__title">{% trans "Categories" %}</h2>
+            </div>
+        </div>
+
+        <div class="category-strip-wrap mb-4">
+            <div class="row category-grid-row">
+                {% for category in categories %}
+                <div class="col-4 col-sm-4 col-md-3 col-lg-2 category-grid-col">
+                    <div class="category-or-brand-card mega-category-card">
+                        <a href="{% url 'category_products' category.id %}" class="thumb">
+                            {% if category.image %}
+                                <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                            {% else %}
+                                <img src="{% static 'images/logo.png' %}" alt="{{ category.name }}">
+                            {% endif %}
+                        </a>
+
+                        <a href="{% url 'category_products' category.id %}" class="name">
+                            {% if LANGUAGE_CODE == "ar" and category.name_ar %}
+                                {{ category.name_ar }}
+                            {% else %}
+                                {{ category.name }}
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if newproducts %}
+        <div class="home-section-head compact-head">
+            <div class="home-section-head__content">
+                <h2 class="home-section-head__title">{% trans "New Arrivals" %}</h2>
+            </div>
+
+            <a href="{% url 'product_section_list' 'newproducts' %}" class="view-all-btn">
+                {% trans "View All" %}
+            </a>
+        </div>
+
+        <div class="product_section_2">
+            <div class="row product-grid-row">
+                {% for product in newproducts %}
+                <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                    {% include "partials/product_card.html" with product=product %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if featured_flowers %}
+        <div class="home-section-head compact-head">
+            <div class="home-section-head__content">
+                <h2 class="home-section-head__title">{% trans "Flowers" %}</h2>
+            </div>
+
+            <a href="{% url 'product_section_list' 'featured_flowers' %}" class="view-all-btn">
+                {% trans "View All" %}
+            </a>
+        </div>
+
+        <div class="product_section_2">
+            <div class="row product-grid-row">
+                {% for product in featured_flowers %}
+                <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                    {% include "partials/product_card.html" with product=product %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if rental_items %}
+        <div class="home-section-head compact-head">
+            <div class="home-section-head__content">
+                <h2 class="home-section-head__title">{% trans "Rentals" %}</h2>
+            </div>
+
+            <a href="{% url 'product_section_list' 'rental_items' %}" class="view-all-btn">
+                {% trans "View All" %}
+            </a>
+        </div>
+
+        <div class="product_section_2">
+            <div class="row product-grid-row">
+                {% for product in rental_items %}
+                <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                    {% include "partials/product_card.html" with product=product %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if event_services %}
+        <div class="home-section-head compact-head">
+            <div class="home-section-head__content">
+                <h2 class="home-section-head__title">{% trans "Services" %}</h2>
+            </div>
+
+            <a href="{% url 'product_section_list' 'event_services' %}" class="view-all-btn">
+                {% trans "View All" %}
+            </a>
+        </div>
+
+        <div class="product_section_2">
+            <div class="row product-grid-row">
+                {% for product in event_services %}
+                <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                    {% include "partials/product_card.html" with product=product %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if luxury_packages %}
+        <div class="home-section-head compact-head">
+            <div class="home-section-head__content">
+                <h2 class="home-section-head__title">{% trans "Packages" %}</h2>
+            </div>
+
+            <a href="{% url 'product_section_list' 'luxury_packages' %}" class="view-all-btn">
+                {% trans "View All" %}
+            </a>
+        </div>
+
+        <div class="product_section_2">
+            <div class="row product-grid-row">
+                {% for product in luxury_packages %}
+                <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                    {% include "partials/product_card.html" with product=product %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if topsales %}
+        <div class="home-section-head compact-head">
+            <div class="home-section-head__content">
+                <h2 class="home-section-head__title">{% trans "Top Orders" %}</h2>
+            </div>
+
+            <a href="{% url 'product_section_list' 'topsales' %}" class="view-all-btn">
+                {% trans "View All" %}
+            </a>
+        </div>
+
+        <div class="product_section_2">
+            <div class="row product-grid-row">
+                {% for product in topsales %}
+                <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                    {% include "partials/product_card.html" with product=product %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if client_logos %}
+        <div class="home-section-head compact-head">
+            <div class="home-section-head__content">
+                <h2 class="home-section-head__title">{% trans "Clients" %}</h2>
+            </div>
+        </div>
+
+        <div class="client-logo-marquee-section">
+            <div class="client-logo-marquee-track">
+                {% for client in client_logos %}
+                    <div class="client-logo-item">
+                        {% if client.website_url %}
+                            <a href="{{ client.website_url }}" target="_blank" rel="noopener">
+                                <img src="{{ client.logo.url }}" alt="{{ client.name }}">
+                            </a>
+                        {% else %}
+                            <img src="{{ client.logo.url }}" alt="{{ client.name }}">
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                {# Duplicate logos for smooth infinite scrolling #}
+                {% for client in client_logos %}
+                    <div class="client-logo-item">
+                        {% if client.website_url %}
+                            <a href="{{ client.website_url }}" target="_blank" rel="noopener">
+                                <img src="{{ client.logo.url }}" alt="{{ client.name }}">
+                            </a>
+                        {% else %}
+                            <img src="{{ client.logo.url }}" alt="{{ client.name }}">
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if trending %}
+        <div class="home-section-head compact-head">
+            <div class="home-section-head__content">
+                <h2 class="home-section-head__title">{% trans "Trending" %}</h2>
+            </div>
+
+            <a href="{% url 'product_section_list' 'trending' %}" class="view-all-btn">
+                {% trans "View All" %}
+            </a>
+        </div>
+
+        <div class="product_section_2">
+            <div class="row product-grid-row">
+                {% for product in trending %}
+                <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                    {% include "partials/product_card.html" with product=product %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

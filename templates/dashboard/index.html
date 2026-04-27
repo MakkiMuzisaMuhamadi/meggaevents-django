@@ -1,0 +1,382 @@
+{% extends "dashboard/base.html" %}
+{% load humanize %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-header-wrap mb-4">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+    <div>
+      <h3 class="dashboard-title mb-1">Store Dashboard</h3>
+      <p class="dashboard-subtitle mb-0">
+        Monitor sales, products, orders, and customer activity in one place.
+      </p>
+    </div>
+
+    <div class="mt-3 mt-md-0">
+      <span class="badge badge-light border px-3 py-2 shadow-sm">
+        <i class="fas fa-calendar-alt mr-2 text-primary"></i>
+        {{ now|date:"F d, Y" }}
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="row mb-4">
+  <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+    <a href="{% url 'admin_add_product' %}" class="btn btn-primary btn-block dash-action-btn">
+      <i class="fas fa-plus-circle mr-2"></i> Add Product
+    </a>
+  </div>
+  <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+    <a href="{% url 'admin_orders' %}" class="btn btn-dark btn-block dash-action-btn">
+      <i class="fas fa-shopping-bag mr-2"></i> View Orders
+    </a>
+  </div>
+  <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+    <a href="{% url 'admin_categories' %}" class="btn btn-outline-primary btn-block dash-action-btn">
+      <i class="fas fa-layer-group mr-2"></i> Categories
+    </a>
+  </div>
+
+  <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+    <a href="{% url 'admin_slides' %}" class="btn btn-outline-success btn-block dash-action-btn">
+      <i class="fas fa-images mr-2"></i> Slides
+    </a>
+  </div>
+  <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+    <a href="{% url 'admin_analytics' %}" class="btn btn-outline-warning btn-block dash-action-btn">
+      <i class="fas fa-chart-pie mr-2"></i> Analytics
+    </a>
+  </div>
+</div>
+
+<!-- KPI CARDS -->
+<div class="row">
+  <div class="col-xl-3 col-md-6 mb-4">
+    <a href="{% url 'admin_products' %}" class="text-decoration-none">
+      <div class="card border-0 shadow-sm rounded-4 dashboard-card stat-card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="stat-icon stat-icon-primary">
+              <i class="fas fa-box"></i>
+            </div>
+            <span class="mini-label">Inventory</span>
+          </div>
+          <p class="text-muted mb-1">Total Products</p>
+          <h3 class="font-weight-bold text-dark mb-0">{{ total_products|intcomma }}</h3>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="col-xl-3 col-md-6 mb-4">
+    <a href="{% url 'admin_orders' %}" class="text-decoration-none">
+      <div class="card border-0 shadow-sm rounded-4 dashboard-card stat-card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="stat-icon stat-icon-success">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+            <span class="mini-label">Sales</span>
+          </div>
+          <p class="text-muted mb-1">Total Orders</p>
+          <h3 class="font-weight-bold text-dark mb-0">{{ total_orders|intcomma }}</h3>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="col-xl-3 col-md-6 mb-4">
+    <a href="{% url 'admin_analytics' %}" class="text-decoration-none">
+      <div class="card border-0 shadow-sm rounded-4 dashboard-card stat-card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="stat-icon stat-icon-warning">
+              <i class="fas fa-coins"></i>
+            </div>
+            <span class="mini-label">Revenue</span>
+          </div>
+          <p class="text-muted mb-1">Total Revenue</p>
+          <h3 class="font-weight-bold text-dark mb-0">UGX {{ total_revenue|intcomma }}</h3>
+        </div>
+      </div>
+    </a>
+  </div>
+
+
+</div>
+
+<!-- SECOND ROW STATS -->
+<div class="row">
+  <div class="col-lg-4 col-md-6 mb-4">
+    <a href="{% url 'admin_categories' %}" class="text-decoration-none">
+      <div class="card border-0 shadow-sm rounded-4 dashboard-card small-stat-card">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <p class="mb-1 text-muted">Categories</p>
+            <h4 class="mb-0 font-weight-bold">{{ total_categories|intcomma }}</h4>
+          </div>
+          <i class="fas fa-layer-group text-primary card-end-icon"></i>
+        </div>
+      </div>
+    </a>
+  </div>
+
+
+
+  <div class="col-lg-4 col-md-6 mb-4">
+    <a href="{% url 'admin_customers' %}" class="text-decoration-none">
+      <div class="card border-0 shadow-sm rounded-4 dashboard-card small-stat-card">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <p class="mb-1 text-muted">Wishlist Items</p>
+            <h4 class="mb-0 font-weight-bold">{{ total_wishlist|intcomma }}</h4>
+          </div>
+          <i class="fas fa-heart text-danger card-end-icon"></i>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- CHARTS -->
+<div class="row">
+  <div class="col-xl-8 mb-4">
+    <div class="card border-0 shadow-sm rounded-4 h-100">
+      <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="mb-1 font-weight-bold">Revenue Trend</h5>
+          <p class="text-muted mb-0">Monthly sales performance overview</p>
+        </div>
+      </div>
+      <div class="card-body pt-2">
+        <canvas id="salesChart" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-4 mb-4">
+    <div class="card border-0 shadow-sm rounded-4 h-100">
+      <div class="card-header bg-white border-0 pt-4 px-4">
+        <h5 class="mb-1 font-weight-bold">Orders by Month</h5>
+        <p class="text-muted mb-0">Volume across recent months</p>
+      </div>
+      <div class="card-body">
+        <canvas id="ordersChart" height="220"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-6 mb-4">
+    <div class="card border-0 shadow-sm rounded-4 h-100">
+      <div class="card-header bg-white border-0 pt-4 px-4">
+        <h5 class="mb-1 font-weight-bold">Products by Category</h5>
+        <p class="text-muted mb-0">Category distribution</p>
+      </div>
+      <div class="card-body">
+        <canvas id="categoryPieChart" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-6 mb-4">
+    <div class="card border-0 shadow-sm rounded-4 h-100">
+      <div class="card-header bg-white border-0 pt-4 px-4">
+        <h5 class="mb-1 font-weight-bold">Products by Brand</h5>
+        <p class="text-muted mb-0">Brand inventory comparison</p>
+      </div>
+      <div class="card-body">
+        <canvas id="brandBarChart" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RECENT ORDERS -->
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+    <div>
+      <h5 class="mb-1 font-weight-bold">Recent Orders</h5>
+      <p class="text-muted mb-0">Latest customer purchases</p>
+    </div>
+    <a href="{% url 'admin_orders' %}" class="btn btn-sm btn-outline-dark">
+      View All
+    </a>
+  </div>
+
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle dashboard-table mb-0">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Phone</th>
+          <th>Total</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in recent_orders %}
+        <tr>
+          <td>
+            <div class="font-weight-semibold text-dark">
+              {{ order.first_name }} {{ order.last_name }}
+            </div>
+            <small class="text-muted">{{ order.email }}</small>
+          </td>
+          <td>{{ order.phone }}</td>
+          <td class="font-weight-bold text-success">UGX {{ order.total_price|intcomma }}</td>
+          <td>{{ order.created_at|date:"M d, Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4" class="text-center text-muted py-5">No orders yet</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const monthLabels = {{ month_labels|safe }};
+  const monthlySales = {{ monthly_sales|safe }};
+  const monthlyOrders = {{ monthly_orders|safe }};
+  const categoryLabels = {{ category_labels|safe }};
+  const categoryCounts = {{ category_counts|safe }};
+  const brandLabels = {{ brand_labels|safe }};
+  const brandCounts = {{ brand_counts|safe }};
+
+  // Revenue line chart
+  const salesCtx = document.getElementById('salesChart');
+  if (salesCtx) {
+    new Chart(salesCtx, {
+      type: 'line',
+      data: {
+        labels: monthLabels,
+        datasets: [{
+          label: 'Revenue',
+          data: monthlySales,
+          borderColor: '#4f46e5',
+          backgroundColor: 'rgba(79, 70, 229, 0.10)',
+          fill: true,
+          tension: 0.35,
+          borderWidth: 3,
+          pointRadius: 4,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true }
+        },
+        scales: {
+          y: { beginAtZero: true },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  }
+
+  // Orders bar chart
+  const orderCtx = document.getElementById('ordersChart');
+  if (orderCtx) {
+    new Chart(orderCtx, {
+      type: 'bar',
+      data: {
+        labels: monthLabels,
+        datasets: [{
+          label: 'Orders',
+          data: monthlyOrders,
+          backgroundColor: [
+            '#111827',
+            '#1f2937',
+            '#374151',
+            '#4b5563',
+            '#6b7280',
+            '#9ca3af'
+          ],
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  }
+
+  // Category pie chart
+  const pieCtx = document.getElementById('categoryPieChart');
+  if (pieCtx) {
+    new Chart(pieCtx, {
+      type: 'pie',
+      data: {
+        labels: categoryLabels,
+        datasets: [{
+          data: categoryCounts,
+          backgroundColor: [
+            '#4f46e5',
+            '#0ea5e9',
+            '#10b981',
+            '#f59e0b',
+            '#ef4444',
+            '#8b5cf6',
+            '#14b8a6',
+            '#ec4899'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  }
+
+  // Brand bar chart
+  const brandCtx = document.getElementById('brandBarChart');
+  if (brandCtx) {
+    new Chart(brandCtx, {
+      type: 'doughnut',
+      data: {
+        labels: brandLabels,
+        datasets: [{
+          data: brandCounts,
+          backgroundColor: [
+            '#111827',
+            '#4f46e5',
+            '#0ea5e9',
+            '#10b981',
+            '#f59e0b',
+            '#ef4444',
+            '#8b5cf6',
+            '#14b8a6'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  }
+</script>
+{% endblock %}

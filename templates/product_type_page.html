@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load i18n %}
+
+{% block title %}
+    {% if LANGUAGE_CODE == "ar" %}
+        {{ page.title_ar }} | {% trans "Mega Events" %}
+    {% else %}
+        {{ page.title }} | {% trans "Mega Events" %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+ 
+
+<div class="container mega-type-page">
+
+    {% if categories %}
+    <div class="home-section-head compact-head">
+        <div class="home-section-head__content">
+            <h2 class="home-section-head__title">{% trans "Categories" %}</h2>
+        </div>
+    </div>
+
+    <div class="category-strip-wrap mb-4">
+        <div class="row category-grid-row">
+            {% for category in categories %}
+            <div class="col-4 col-sm-4 col-md-3 col-lg-2 category-grid-col">
+                <div class="category-or-brand-card mega-category-card">
+                    <a href="{% url 'category_products' category.id %}" class="thumb">
+                        {% if category.image %}
+                            <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                        {% else %}
+                            <img src="{% static 'images/logo.png' %}" alt="{{ category.name }}">
+                        {% endif %}
+                    </a>
+
+                    <a href="{% url 'category_products' category.id %}" class="name">
+                        {% if LANGUAGE_CODE == "ar" and category.name_ar %}
+                            {{ category.name_ar }}
+                        {% else %}
+                            {{ category.name }}
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if featured_products %}
+    <div class="home-section-head compact-head">
+        <div class="home-section-head__content">
+            <h2 class="home-section-head__title">{% trans "Featured" %}</h2>
+        </div>
+    </div>
+
+    <div class="product_section_2">
+        <div class="row product-grid-row">
+            {% for product in featured_products %}
+            <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                {% include "partials/product_card.html" with product=product %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div id="products" class="home-section-head compact-head">
+        <div class="home-section-head__content">
+            <h2 class="home-section-head__title">
+                {% if LANGUAGE_CODE == "ar" %}
+                    {{ page.title_ar }}
+                {% else %}
+                    {{ page.title }}
+                {% endif %}
+            </h2>
+        </div>
+    </div>
+
+    {% if products %}
+    <div class="product_section_2">
+        <div class="row product-grid-row">
+            {% for product in products %}
+            <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                {% include "partials/product_card.html" with product=product %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="mega-empty-state">
+        <div class="mega-empty-icon">
+            <i class="fa-solid fa-box-open"></i>
+        </div>
+        <h4>{% trans "No products found" %}</h4>
+        <p>{% trans "Please check again later." %}</p>
+        <a href="{% url 'index' %}" class="mega-empty-btn">
+            {% trans "Back Home" %}
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

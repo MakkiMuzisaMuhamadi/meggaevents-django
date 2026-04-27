@@ -1,0 +1,344 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load i18n %}
+
+{% block title %}
+    {% if LANGUAGE_CODE == "ar" and product.product_name_ar %}
+        {{ product.product_name_ar }} | {% trans "Mega Events" %}
+    {% else %}
+        {{ product.product_name }} | {% trans "Mega Events" %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="lux-product-page">
+
+    <div class="container lux-product-section">
+        <div class="row align-items-start">
+
+            <div class="col-lg-6 mb-4">
+                <div class="lux-gallery-card">
+                    {% if product.is_out_of_stock %}
+                    <div class="out-of-stock-overlay">
+                        <span class="out-of-stock-text">{% trans "Out of stock" %}</span>
+                    </div>
+                    {% endif %}
+
+                    <div id="product-carousel" class="carousel slide lux-product-carousel" data-ride="carousel" data-interval="false">
+                        <div class="carousel-inner">
+
+                            <div class="carousel-item active">
+                                <div class="lux-main-image-wrap">
+                                    {% if product.image %}
+                                        <img class="lux-main-image" src="{{ product.image.url }}" alt="{{ product.product_name }}">
+                                    {% else %}
+                                        <div class="product-card-no-image">
+                                            <i class="fa-solid fa-image"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% for image in product_images %}
+                            <div class="carousel-item">
+                                <div class="lux-main-image-wrap">
+                                    <img class="lux-main-image" src="{{ image.image.url }}" alt="{{ product.product_name }}">
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+
+                        {% if product_images %}
+                        <a class="carousel-control-prev lux-carousel-control" href="#product-carousel" role="button" data-slide="prev">
+                            <span><i class="fa-solid fa-angle-left"></i></span>
+                        </a>
+
+                        <a class="carousel-control-next lux-carousel-control" href="#product-carousel" role="button" data-slide="next">
+                            <span><i class="fa-solid fa-angle-right"></i></span>
+                        </a>
+                        {% endif %}
+                    </div>
+
+                    <div class="lux-thumbnails">
+                        {% if product.image %}
+                        <div class="lux-thumb-item active-thumb" data-target="#product-carousel" data-slide-to="0">
+                            <img src="{{ product.image.url }}" alt="{{ product.product_name }}">
+                        </div>
+                        {% endif %}
+
+                        {% for image in product_images %}
+                        <div class="lux-thumb-item" data-target="#product-carousel" data-slide-to="{{ forloop.counter }}">
+                            <img src="{{ image.image.url }}" alt="{{ product.product_name }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <div class="lux-product-info-card">
+
+                    <div class="lux-mini-label">
+                        {% trans "Mega Events" %} • {% trans "Flowers" %} • {% trans "Rentals" %} • {% trans "Services" %}
+                    </div>
+
+                    <h1 class="lux-product-title">
+                        {% if LANGUAGE_CODE == "ar" and product.product_name_ar %}
+                            {{ product.product_name_ar }}
+                        {% else %}
+                            {{ product.product_name }}
+                        {% endif %}
+                    </h1>
+
+                    <div class="lux-meta-row">
+                        {% if product.category %}
+                        <span class="lux-meta-pill">
+                            {% if LANGUAGE_CODE == "ar" and product.category.name_ar %}
+                                {{ product.category.name_ar }}
+                            {% else %}
+                                {{ product.category.name }}
+                            {% endif %}
+                        </span>
+                        {% endif %}
+
+                        <span class="lux-meta-pill">
+                            {% if product.item_type == "SALE" %}
+                                {% trans "For Sale" %}
+                            {% elif product.item_type == "RENTAL" %}
+                                {% trans "For Rent" %}
+                            {% else %}
+                                {% trans "Service" %}
+                            {% endif %}
+                        </span>
+
+                        {% if product.supplier_name %}
+                        <span class="lux-meta-pill">{{ product.supplier_name }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="lux-rating-row">
+                        <div class="lux-rating-stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star-half-stroke"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <span class="lux-rating-text">{% trans "Premium selection" %}</span>
+                    </div>
+
+                    {% if product.is_out_of_stock %}
+                    <div class="alert alert-warning mt-3 mb-4">
+                        <i class="fa-solid fa-circle-exclamation mr-2"></i>
+                        {% trans "This product is currently out of stock." %}
+                    </div>
+                    {% endif %}
+
+                    {% if product.price_type == "QUOTE" or product.has_price %}
+                    <div class="lux-price-box">
+                        <div class="lux-price-label">
+                            {% if product.price_type == "QUOTE" %}
+                                {% trans "Price" %}
+                            {% elif product.price_type == "PER_HOUR" %}
+                                {% trans "Price Per Hour" %}
+                            {% elif product.price_type == "PER_DAY" %}
+                                {% trans "Price Per Day" %}
+                            {% elif product.price_type == "PER_EVENT" %}
+                                {% trans "Price Per Event" %}
+                            {% else %}
+                                {% trans "Price" %}
+                            {% endif %}
+                        </div>
+
+                        {% if product.price_type == "QUOTE" %}
+                            <div class="lux-price-value">{% trans "Request Quote" %}</div>
+                        {% elif product.has_price %}
+                            {% if product.has_discount %}
+                                <div class="lux-price-value">
+                                    {{ product.currency }} {{ product.discounted_price|intcomma }}
+                                </div>
+
+                                <div class="lux-old-price">
+                                    {{ product.currency }} {{ product.old_price|intcomma }}
+                                </div>
+
+                                <div class="lux-discount-row">
+                                    <span class="lux-discount-badge">
+                                        -{{ product.discount_percent_display }}%
+                                    </span>
+                                    <span class="lux-save-text">
+                                        {% trans "You save" %} {{ product.currency }} {{ product.amount_saved|intcomma }}
+                                    </span>
+                                </div>
+                            {% else %}
+                                <div class="lux-price-value">
+                                    {{ product.currency }} {{ product.price|intcomma }}
+                                </div>
+                            {% endif %}
+
+                            {% if product.price_type == "PER_HOUR" %}
+                                <small class="text-muted d-block mt-2">{% trans "per hour" %}</small>
+                            {% elif product.price_type == "PER_DAY" %}
+                                <small class="text-muted d-block mt-2">{% trans "per day" %}</small>
+                            {% elif product.price_type == "PER_EVENT" %}
+                                <small class="text-muted d-block mt-2">{% trans "per event" %}</small>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if product.deposit_amount and product.deposit_amount > 0 %}
+                            <small class="text-muted d-block mt-2">
+                                {% trans "Deposit" %}: {{ product.currency }} {{ product.deposit_amount|intcomma }}
+                            </small>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <div class="lux-desc-box">
+                        <h5>{% trans "Product Details" %}</h5>
+                        <p>
+                            {% if LANGUAGE_CODE == "ar" and product.description_ar %}
+                                {{ product.description_ar }}
+                            {% else %}
+                                {{ product.description }}
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    {% if product.item_type == "RENTAL" or product.item_type == "SERVICE" %}
+                    <div class="lux-desc-box">
+                        <h5>
+                            {% if product.item_type == "RENTAL" %}
+                                {% trans "Rental Details" %}
+                            {% else %}
+                                {% trans "Booking Details" %}
+                            {% endif %}
+                        </h5>
+
+                        <ul class="mb-0 pl-3">
+                            <li>{% trans "Event date and venue are required before adding this item." %}</li>
+
+                            {% if product.rental_min_hours %}
+                            <li>{% trans "Minimum rental hours" %}: {{ product.rental_min_hours }}</li>
+                            {% endif %}
+
+                            {% if product.rental_max_days %}
+                            <li>{% trans "Maximum rental days" %}: {{ product.rental_max_days }}</li>
+                            {% endif %}
+
+                            {% if product.supplier_city %}
+                            <li>{% trans "Provider city" %}: {{ product.supplier_city }}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="lux-action-row">
+                        {% if not product.is_out_of_stock %}
+
+                            {% if product.item_type == "SALE" %}
+                                <form action="{% url 'add_to_cart' product.id %}" method="post" class="lux-action-form ajax-add-to-cart-form">
+                                    {% csrf_token %}
+                                    <button data-product-id="{{ product.id }}" type="submit" class="lux-btn lux-btn-gold">
+                                        <i class="fa-solid fa-cart-shopping mr-2"></i>
+                                        {% trans "Add To Cart" %}
+                                    </button>
+                                </form>
+                            {% else %}
+                                <button
+                                    type="button"
+                                    class="lux-btn lux-btn-gold open-booking-drawer-btn"
+                                    data-product-id="{{ product.id }}"
+                                    data-product-type="{{ product.item_type }}"
+                                    data-product-name="{% if LANGUAGE_CODE == 'ar' and product.product_name_ar %}{{ product.product_name_ar|escapejs }}{% else %}{{ product.product_name|escapejs }}{% endif %}"
+                                    data-product-image="{% if product.image %}{{ product.image.url }}{% endif %}"
+                                    data-product-price="{% if product.price_type == 'QUOTE' %}{% trans 'Request Quote' %}{% elif product.has_price %}{{ product.currency }} {{ product.discounted_price|intcomma }}{% else %}{% endif %}"
+                                    data-action-url="{% url 'add_to_cart' product.id %}"
+                                >
+                                    <i class="fa-solid fa-calendar-check mr-2"></i>
+                                    {% if product.item_type == "RENTAL" %}
+                                        {% trans "Rent Now" %}
+                                    {% else %}
+                                        {% trans "Book Now" %}
+                                    {% endif %}
+                                </button>
+                            {% endif %}
+
+                        {% else %}
+                            <button class="lux-btn lux-btn-muted disabled-btn" disabled>
+                                <i class="fa-solid fa-ban mr-2"></i>
+                                {% trans "Out of stock" %}
+                            </button>
+                        {% endif %}
+
+                        {% if product.supplier_phone %}
+                            <a href="tel:{{ product.supplier_phone }}" class="lux-btn lux-btn-outline">
+                                <i class="fa-solid fa-phone mr-2"></i> {% trans "Call Us" %}
+                            </a>
+                        {% else %}
+                            <a href="tel:+971500000000" class="lux-btn lux-btn-outline">
+                                <i class="fa-solid fa-phone mr-2"></i> {% trans "Call Us" %}
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <div class="lux-share-row">
+                        <strong>{% trans "Share" %}:</strong>
+                        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fa-brands fa-pinterest"></i></a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        {% if similar_products %}
+        <div class="luxury-section-head mb-4">
+            <span class="luxury-mini">{% trans "More To Explore" %}</span>
+            <h2 class="luxury-title">{% trans "You May Also Like" %}</h2>
+        </div>
+
+        <div class="product_section_2">
+            <div class="row product-grid-row">
+                {% for item in similar_products %}
+                <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                    {% include "partials/product_card.html" with product=item %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const thumbs = document.querySelectorAll('.lux-thumb-item');
+
+    thumbs.forEach((thumb) => {
+        thumb.addEventListener('click', function () {
+            thumbs.forEach(t => t.classList.remove('active-thumb'));
+            this.classList.add('active-thumb');
+        });
+    });
+
+    if (window.jQuery) {
+        jQuery('#product-carousel').on('slid.bs.carousel', function (e) {
+            const activeIndex = e.to;
+            thumbs.forEach(t => t.classList.remove('active-thumb'));
+            if (thumbs[activeIndex]) {
+                thumbs[activeIndex].classList.add('active-thumb');
+            }
+        });
+    }
+});
+</script>
+
+{% endblock %}

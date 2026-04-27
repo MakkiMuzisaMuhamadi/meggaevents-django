@@ -1,0 +1,159 @@
+{% load humanize %}
+{% load i18n %}
+
+<div class="cart-drawer-header">
+    <div>
+        <h4>{% trans "Your Cart" %}</h4>
+        <small>{{ cart_count }} {% trans "item" %}{{ cart_count|pluralize }}</small>
+    </div>
+    <button type="button" class="cart-drawer-close" id="cartDrawerCloseBtn">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+</div>
+
+<div class="cart-drawer-body">
+    {% if cart_items %}
+        <div class="cart-drawer-items">
+            {% for item in cart_items %}
+            <div class="cart-drawer-item">
+                <a href="{% url 'product_detail' item.product.id %}" class="cart-drawer-item-image">
+                    {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.product_name }}">
+                    {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center h-100">
+                            <i class="fa-solid fa-image text-muted"></i>
+                        </div>
+                    {% endif %}
+                </a>
+
+                <div class="cart-drawer-item-info">
+                    <a href="{% url 'product_detail' item.product.id %}" class="cart-drawer-item-name">
+                        {% if LANGUAGE_CODE == "ar" and item.product.product_name_ar %}
+                            {{ item.product.product_name_ar }}
+                        {% else %}
+                            {{ item.product.product_name }}
+                        {% endif %}
+                    </a>
+
+                    <div class="mb-1">
+                        <small class="cart-item-badge">
+                            {% if item.product.item_type == "SALE" %}
+                                {% trans "For Sale" %}
+                            {% elif item.product.item_type == "RENTAL" %}
+                                {% trans "For Rent" %}
+                            {% else %}
+                                {% trans "Service" %}
+                            {% endif %}
+                        </small>
+                    </div>
+
+                    {% if item.product.item_type == "RENTAL" or item.product.item_type == "SERVICE" %}
+                    <div class="small text-muted mb-2">
+                        {% if item.event_date %}
+                            <div>
+                                <i class="fa-regular fa-calendar mr-1"></i>
+                                {{ item.event_date }}
+                            </div>
+                        {% endif %}
+
+                        {% if item.venue %}
+                            <div>
+                                <i class="fa-solid fa-location-dot mr-1"></i>
+                                {{ item.venue }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <div class="cart-drawer-item-price">
+                        {% if item.product.price_type == "QUOTE" %}
+                            <strong>{% trans "Request Quote" %}</strong>
+                        {% elif item.product.has_price %}
+                            <strong>{{ item.product.currency }} {{ item.unit_price|intcomma }}</strong>
+
+                            {% if item.product.has_discount %}
+                            <span class="cart-drawer-item-old-price">
+                                {{ item.product.currency }} {{ item.old_unit_price|intcomma }}
+                            </span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <div class="cart-drawer-item-actions">
+                        {% if item.product.item_type == "SALE" %}
+                        <form method="post" action="{% url 'update_cart_item' item.id %}" class="ajax-cart-action-form qty-form-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="cart_action" value="decrease">
+                            <button type="submit" class="qty-btn" aria-label="Decrease quantity">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                        </form>
+
+                        <span class="qty-value">{{ item.quantity }}</span>
+
+                        <form method="post" action="{% url 'update_cart_item' item.id %}" class="ajax-cart-action-form qty-form-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="cart_action" value="increase">
+                            <button type="submit" class="qty-btn" aria-label="Increase quantity">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </form>
+                        {% else %}
+                        <span class="qty-value">
+                            {% trans "Qty" %}: {{ item.quantity }}
+                        </span>
+                        {% endif %}
+
+                        <form method="post" action="{% url 'delete_item' item.id %}" class="ajax-cart-action-form remove-form-inline ml-2">
+                            {% csrf_token %}
+                            <button type="submit" class="remove-btn" title="{% trans 'Remove' %}" aria-label="{% trans 'Remove' %}">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="cart-drawer-line-total">
+                    {% if item.product.price_type == "QUOTE" %}
+                        {% trans "Quote" %}
+                    {% elif item.product.has_price %}
+                        {{ item.product.currency }} {{ item.total_price|intcomma }}
+                    {% else %}
+                        <span class="text-muted">—</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="cart-drawer-empty">
+            <div class="cart-drawer-empty-icon">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <h5>{% trans "Your cart is empty" %}</h5>
+            <p>{% trans "Add flowers, rentals, or services and they will appear here." %}</p>
+            <a href="{% url 'index' %}" class="drawer-shop-btn">{% trans "Continue shopping" %}</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="cart-drawer-footer">
+    <div class="cart-drawer-summary">
+        <div class="cart-drawer-summary-row">
+            <span>{% trans "Subtotal" %}</span>
+            <strong>AED {{ subtotal|intcomma }}</strong>
+        </div>
+
+        <div class="cart-drawer-summary-row total-row">
+            <span>{% trans "Total" %}</span>
+            <strong>AED {{ total_price|intcomma }}</strong>
+        </div>
+    </div>
+
+    <div class="cart-drawer-footer-actions">
+        <a href="{% url 'cart' %}" class="drawer-view-cart-btn">{% trans "View Cart" %}</a>
+        <a href="{% url 'checkout' %}" class="drawer-checkout-btn {% if not cart_items %}disabled-link{% endif %}">
+            {% trans "Checkout" %}
+        </a>
+    </div>
+</div>

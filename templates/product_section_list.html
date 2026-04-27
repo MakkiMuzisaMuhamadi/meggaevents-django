@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="product_section">
+    <div class="container py-4">
+
+        <div class="home-section-head">
+            <div class="home-section-head__content">
+                <span class="home-section-head__badge">{{ section_title }}</span>
+                <h2 class="home-section-head__title">{{ section_title }}</h2>
+                <p class="home-section-head__text">{{ section_description }}</p>
+            </div>
+        </div>
+
+        <div class="product_section_2">
+            <div class="row product-grid-row">
+                {% for product in products %}
+                <div class="col-6 col-md-4 col-lg-3 product-grid-col">
+                    {% include "partials/product_card.html" with product=product %}
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if not products %}
+            <div class="alert alert-light border mt-3">
+                No products found in this section yet.
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

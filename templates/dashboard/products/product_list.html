@@ -1,0 +1,222 @@
+{% extends "dashboard/base.html" %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}Items{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h4 class="mb-1 font-weight-bold">Items</h4>
+    <p class="text-muted mb-0">Manage flowers, rentals, services, pricing, and availability.</p>
+  </div>
+  <a href="{% url 'admin_add_product' %}" class="btn btn-primary">
+    <i class="fas fa-plus-circle mr-2"></i>Add Item
+  </a>
+</div>
+
+<div class="card shadow-sm border-0 rounded-4">
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle" id="productsTable">
+      <thead>
+        <tr>
+          <th style="width:70px;">Image</th>
+          <th>Item</th>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Discount</th>
+          <th>Status</th>
+          <th style="width:140px;">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for product in products %}
+        <tr>
+          <td>
+            {% if product.image %}
+              <img src="{{ product.image.url }}" class="rounded" style="width:55px;height:55px;object-fit:cover;">
+            {% else %}
+              <div class="bg-light border rounded d-flex align-items-center justify-content-center" style="width:55px;height:55px;">
+                <i class="fas fa-image text-muted"></i>
+              </div>
+            {% endif %}
+          </td>
+
+          <td>
+            <div class="font-weight-bold text-dark">{{ product.product_name }}</div>
+
+            {% if product.product_name_ar %}
+              <small class="text-muted d-block" dir="rtl">{{ product.product_name_ar }}</small>
+            {% endif %}
+
+            {% if product.supplier_name %}
+              <small class="text-muted d-block">
+                Provider: {{ product.supplier_name }}
+              </small>
+            {% endif %}
+
+            <small class="text-muted d-block">
+              Added {{ product.added_at|date:"M d, Y" }}
+            </small>
+          </td>
+
+          <td>
+            {% if product.item_type == "SALE" %}
+              <span class="badge badge-success">For Sale</span>
+            {% elif product.item_type == "RENTAL" %}
+              <span class="badge badge-primary">Rental</span>
+            {% elif product.item_type == "SERVICE" %}
+              <span class="badge badge-info">Service</span>
+            {% endif %}
+
+            <div class="mt-1">
+              {% if product.price_type == "QUOTE" %}
+                <span class="badge badge-light border">Request Quote</span>
+              {% elif product.price_type == "PER_HOUR" %}
+                <span class="badge badge-light border">Per Hour</span>
+              {% elif product.price_type == "PER_DAY" %}
+                <span class="badge badge-light border">Per Day</span>
+              {% elif product.price_type == "PER_EVENT" %}
+                <span class="badge badge-light border">Per Event</span>
+              {% else %}
+                <span class="badge badge-light border">Fixed</span>
+              {% endif %}
+            </div>
+          </td>
+
+          <td>
+            <div class="font-weight-bold">{{ product.category.name }}</div>
+            {% if product.category.name_ar %}
+              <small class="text-muted" dir="rtl">{{ product.category.name_ar }}</small>
+            {% endif %}
+
+            <div class="mt-1">
+              {% if product.new_arrival %}
+                <span class="badge badge-secondary mr-1 mb-1">New</span>
+              {% endif %}
+              {% if product.featured_flowers %}
+                <span class="badge badge-success mr-1 mb-1">Flowers</span>
+              {% endif %}
+              {% if product.rental_items %}
+                <span class="badge badge-primary mr-1 mb-1">Rentals</span>
+              {% endif %}
+              {% if product.event_services %}
+                <span class="badge badge-info mr-1 mb-1">Services</span>
+              {% endif %}
+              {% if product.luxury_packages %}
+                <span class="badge badge-dark mr-1 mb-1">Luxury</span>
+              {% endif %}
+              {% if product.topsales %}
+                <span class="badge badge-warning mr-1 mb-1">Top</span>
+              {% endif %}
+              {% if product.trending %}
+                <span class="badge badge-danger mr-1 mb-1">Trending</span>
+              {% endif %}
+            </div>
+          </td>
+
+          <td class="font-weight-bold">
+            {% if product.price_type == "QUOTE" %}
+              <span class="text-muted">Request Quote</span>
+            {% elif product.has_discount %}
+              <div>{{ product.currency }} {{ product.discounted_price|floatformat:2|intcomma }}</div>
+              <small class="text-muted">
+                <del>{{ product.currency }} {{ product.price|floatformat:2|intcomma }}</del>
+              </small>
+            {% else %}
+              {{ product.currency }} {{ product.price|floatformat:2|intcomma }}
+            {% endif %}
+
+            {% if product.deposit_amount %}
+              <small class="text-muted d-block">
+                Deposit: {{ product.currency }} {{ product.deposit_amount|floatformat:2|intcomma }}
+              </small>
+            {% endif %}
+          </td>
+
+          <td>
+            {% if product.discount_amount %}
+              <span class="badge badge-info">
+                {{ product.currency }} {{ product.discount_amount|floatformat:2|intcomma }}
+              </span>
+            {% elif product.discount_percent %}
+              <span class="badge badge-warning">{{ product.discount_percent }}%</span>
+            {% else %}
+              <span class="badge badge-light border">None</span>
+            {% endif %}
+          </td>
+
+          <td>
+            {% if not product.is_active %}
+              <span class="badge badge-secondary">Inactive</span>
+            {% elif product.is_out_of_stock %}
+              <span class="badge badge-danger">Unavailable</span>
+            {% else %}
+              <span class="badge badge-success">Active</span>
+            {% endif %}
+
+            {% if product.item_type == "SALE" %}
+              <small class="d-block text-muted mt-1">
+                Stock: {{ product.stock_quantity }}
+              </small>
+            {% endif %}
+          </td>
+
+          <td>
+            <div class="btn-group">
+              <a href="{% url 'admin_edit_product' product.id %}" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-edit"></i>
+              </a>
+
+              <button class="btn btn-sm btn-outline-danger"
+                      data-toggle="modal"
+                      data-target="#deleteModal{{ product.id }}">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+
+            <div class="modal fade" id="deleteModal{{ product.id }}" tabindex="-1">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 rounded-4">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Delete Item</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+
+                  <div class="modal-body">
+                    Are you sure you want to delete <strong>{{ product.product_name }}</strong>?
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                    <form method="post" action="{% url 'admin_delete_product' product.id %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+$(function () {
+  $("#productsTable").DataTable({
+    responsive: true,
+    pageLength: 10,
+    order: []
+  });
+});
+</script>
+{% endblock %}
